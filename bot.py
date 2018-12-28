@@ -33,6 +33,7 @@ async def on_ready():
     bot.load_extension("jishaku")
     bot.load_extension("cogs.recipes")
     bot.load_extension("cogs.info")
+    bot.load_extension("cogs.food")
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
     bot.db = await asyncpg.create_pool(**credentials) 
     bot.launch_time = time.time()
@@ -49,5 +50,10 @@ async def on_message(message):
 async def on_command(ctx):
     bot.counter+=1
 
+@bot.event
+async def on_message_edit(before,after):
+    if not after.author.bot:
+        await bot.process_commands(after)
+        
 bot.loop.run_until_complete(set_up_token())
 bot.run(TOKEN)
