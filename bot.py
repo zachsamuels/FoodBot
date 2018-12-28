@@ -31,7 +31,7 @@ async def on_message(message):
         await bot.process_commands(message)
 
 @bot.event
-async def on_command():
+async def on_command(ctx):
     bot.counter+=1
 
 bot.loop.run_until_complete(set_up_token())
