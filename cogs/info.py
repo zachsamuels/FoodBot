@@ -64,7 +64,7 @@ class Info:
         em.add_field(name='Commands Run', value=str(self.bot.counter))
         em.add_field(name='Process Stats', value=f'''{memory_usage:.2f} MiB\n{psutil.cpu_percent()}% CPU''')
         em.add_field(name='Uptime', value=uptime)
-        em.add_field(name = "Prefixes", value = f"``f!``")
+        em.add_field(name = "Prefixes", value = f"``food!``")
         em.add_field(name="Coded By", value = capn.mention)
         em.add_field(name="Lines of Code",value = length)
         em.add_field(name="Latest Commit",value = f"```css\n{commit}\n```")

@@ -37,7 +37,7 @@ async def on_ready():
     bot.db = await asyncpg.create_pool(**credentials) 
     bot.launch_time = time.time()
     bot.counter = 0
-    await bot.change_presence(activity=discord.Game(name="f!help")) 
+    await bot.change_presence(activity=discord.Game(name="food!help")) 
     print("Ready!")
 
 @bot.event
