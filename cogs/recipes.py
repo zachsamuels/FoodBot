@@ -39,7 +39,7 @@ class Recipe:
         general = discord.Embed(title = name, description = "General Info", color = green, url = url)
         general.add_field(name= "Time to Make", value= time)
         general.add_field(name="Servings",value=servings)
-        general.add_field(name= "Ingredients", value=ingredients)
+        general.add_field(name= "Ingredients", value=ingredients, inline = False)
         nutrition = discord.Embed(title = name, description="Nutrition Facts",url=url,color=green)
         nutrition.add_field(name="Health and Diet",value=d)
         nutrition.add_field(name="Calories", value=calories)

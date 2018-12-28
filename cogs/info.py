@@ -41,7 +41,7 @@ class Info:
         for guild in self.bot.guilds:
             all_guilds.append(guild)
         total_members = sum(1 for _ in self.bot.get_all_members())
-        capn = await self.bot.get_user_info(422181415598161921)
+        capn = self.bot.get_user(422181415598161921)
         dir_path = os.path.dirname(os.path.realpath(__file__))
         length=0
         for f in os.listdir(dir_path):
