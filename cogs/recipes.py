@@ -9,6 +9,7 @@ class Recipe:
 
     @commands.command()
     async def recipe(self, ctx, *, search):
+        """Gives a recipe for your search along with Nutritional Facts"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
         app_id = data['recipe_id']
         app_key = data['recipe_key']
