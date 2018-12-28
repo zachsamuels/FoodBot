@@ -5,7 +5,7 @@ import time
 import psutil
 import inspect
 import git 
-from paginator import Pages,HelpPaginator, CannotPaginate
+from .paginator import Pages, HelpPaginator, CannotPaginate
 
 class Info:
     def __init__(self, bot):
