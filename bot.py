@@ -16,12 +16,13 @@ async def set_up_token():
 @bot.event
 async def on_ready():
     bot.load_extension("jishaku")
-    bot.load_extension("cogs/recipes")
-    bot.load_extension("cogs/info")
+    bot.load_extension("cogs.recipes")
+    bot.load_extension("cogs.info")
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
     bot.db = await asyncpg.create_pool(**credentials) 
     bot.launch_time = time.time()
     bot.counter = 0
+    await bot.change_presence(activity=discord.Game(name="f!help")) 
     print("Ready!")
 
 @bot.event

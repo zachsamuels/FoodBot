@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import asyncio
+import aiohttp
 
 class Recipe:
     def __init__(self, bot):
@@ -15,7 +17,7 @@ class Recipe:
                 t = await r.json()
             await ses.close()
         if not t['hits']:
-            return print("No Recipes Found")
+            return await ctx.send("No Recipes Found")
         recipe = t['hits'][0]["recipe"]
         name = recipe['label']
         time = str(int(recipe['totalTime'])) + " minutes"

@@ -11,7 +11,7 @@ class Info:
     def __init__(self, bot):
         self.bot = bot
         self.process = psutil.Process()
-        self.bot.remove_command("help")
+        bot.remove_command("help")
 
     def get_uptime(self, *, brief=False):
         now = time.time()
