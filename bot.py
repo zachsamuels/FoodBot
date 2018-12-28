@@ -4,7 +4,7 @@ import asyncpg
 import asyncio
 import time
 
-bot = commands.Bot(command_prefix="f!")
+bot = commands.Bot(command_prefix="food!")
 
 async def set_up_token():
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
@@ -13,6 +13,21 @@ async def set_up_token():
     global TOKEN
     TOKEN = data["token"]
 
+@bot.command()
+async def ping(ctx):
+    'Pings Bot'
+    channel = ctx.channel
+    t1 = time.perf_counter()
+    await channel.trigger_typing()
+    t2 = time.perf_counter()
+    latency = round(bot.latency *1000)
+    t = round((t2-t1)*1000)
+    green = discord.Color.green()
+    desc=f":heartbeat: **{latency}**ms \n :stopwatch: **{t}**ms"
+    em = discord.Embed(title = ":ping_pong: Pong",description = desc, color = green)
+    em.set_footer(text=f"Requested by {ctx.author.name}",icon_url=ctx.author.avatar_url)
+    await ctx.send(embed=em)
+    
 @bot.event
 async def on_ready():
     bot.load_extension("jishaku")
