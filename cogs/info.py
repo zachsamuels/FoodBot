@@ -57,7 +57,7 @@ class Info:
         except:
             repo = git.Repo(r"/home/zachary/FoodBot.git")
         commit = repo.head.commit.message    
-        em = discord.Embed(title = "Bot Info", description = f"[Bot Invite](https://discordapp.com/oauth2/authorize?&client_id={self.bot.user.id}&scope=bot&permissions=8) | [Support Server](https://discord.gg/MJV4qsV) | [Source Code](https://github.com/CapnS/FoodBot) | [Patreon](https://www.patreon.com/capn)")
+        em = discord.Embed(title = "Bot Info", description = f"[Bot Invite](https://discordapp.com/oauth2/authorize?&client_id={self.bot.user.id}&scope=bot&permissions=8) | [Support Server](https://discord.gg/MJV4qsV) | [DBL](https://discordbots.org/bot/528131615680102410) | [Source Code](https://github.com/CapnS/FoodBot) | [Patreon](https://www.patreon.com/capn)")
         em.color = discord.Color.gold()
         em.add_field(name='Guilds', value=str(len(all_guilds)))
         em.add_field(name = "Users", value = str(total_members))
