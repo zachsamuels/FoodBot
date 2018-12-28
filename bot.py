@@ -14,6 +14,10 @@ async def set_up_token():
     TOKEN = data["token"]
 
 @bot.command()
+async def echo(ctx, *, repeat):
+    await ctx.send(repeat)
+    
+@bot.command()
 async def ping(ctx):
     'Pings Bot'
     channel = ctx.channel
@@ -54,6 +58,6 @@ async def on_command(ctx):
 async def on_message_edit(before,after):
     if not after.author.bot:
         await bot.process_commands(after)
-        
+
 bot.loop.run_until_complete(set_up_token())
 bot.run(TOKEN)
