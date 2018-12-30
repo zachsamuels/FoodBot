@@ -39,6 +39,7 @@ async def on_ready():
     bot.load_extension("cogs.recipes")
     bot.load_extension("cogs.info")
     bot.load_extension("cogs.food")
+    bot.load_extension("cogs.errors")
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
     bot.db = await asyncpg.create_pool(**credentials) 
     bot.launch_time = time.time()
