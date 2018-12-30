@@ -18,8 +18,7 @@ class Food:
             async with ses.get("https://api.imgur.com/3/gallery/r/foodporn/", headers=headers) as d:
                 j = await d.json()
             await ses.close()
-        y = 0
-        x = j["data"][y]
+        x = random.choice(j["data"])
         url = x["link"]
         name = x["title"]
         blue = discord.Color.blue()
@@ -47,8 +46,7 @@ class Food:
                 if str(r.emoji) == "\U000023f9":
                     return await message.delete()
                 else:
-                    y = y - 1 if r.emoji == "U000025c0" else y + 1
-            x = j["data"][y]
+                    x = random.choice(j["data"])
             url = x["link"]
             name = x["title"]
             blue = discord.Color.blue()
