@@ -59,8 +59,7 @@ class Food:
         app_id = data['food_id']
         app_key = data['food_key']
         async with self.bot.session.get("https://api.edamam.com/api/nutrition-data?ingr="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
-            t = r.text
-            await ctx.send(t)
+            t = await r.json()
         url = t.get("uri")
         diet = t.get("dietLabels")
         health = t.get("healthLabels")
