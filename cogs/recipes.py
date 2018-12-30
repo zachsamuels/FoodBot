@@ -67,10 +67,7 @@ class Recipe:
                 if str(r.emoji) == "\U000023f9":
                     return await message.delete()
                 else:
-                    if x == 0:
-                        x = 1
-                    else: 
-                        x = 0
+                    x = int(not x)
                 em = embeds[x]
                 await message.edit(embed = em)    
 
