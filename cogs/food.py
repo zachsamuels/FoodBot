@@ -76,9 +76,12 @@ class Food:
         blue = discord.Color.blue()
         e = discord.Embed(title="Nutrition Facts",description = search.title(), url = url, color = blue)
         e.add_field(name= "Calories",value = calories)
-        e.add_field(name="Diet and Health Labels", value = d)
-        e.add_field(name="Cautions", value = c)
-        e.add_field(name ="Nutrients",value = nutrients, inline = False)
+        if d:
+            e.add_field(name="Diet and Health Labels", value = d)
+        if c:
+            e.add_field(name="Cautions", value = c)
+        if nutrients:
+            e.add_field(name ="Nutrients",value = nutrients, inline = False)
         e.set_footer(text="Requested by "+ ctx.author.name, icon_url=ctx.author.avatar_url)
         await ctx.send(embed=e)
 
