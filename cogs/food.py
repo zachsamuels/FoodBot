@@ -26,7 +26,7 @@ class Food:
         e.set_image(url=url)
         e.set_footer(text="Requested by "+ ctx.author.name, icon_url=ctx.author.avatar_url)
         message = await ctx.send(embed=e)
-        emojis = ("\U000025c0","\U000025b6","\U000023f9")
+        emojis = ("\U000025b6","\U000023f9")
         def check(reaction,user):
             return user == ctx.author and str(reaction.emoji) in emojis
         for emoji in emojis:
