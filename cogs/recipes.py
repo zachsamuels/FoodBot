@@ -13,10 +13,8 @@ class Recipe:
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
         app_id = data['recipe_id']
         app_key = data['recipe_key']
-        async with aiohttp.ClientSession() as ses:
-            async with ses.get("https://api.edamam.com/search?q="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
-                t = await r.json()
-            await ses.close()
+        async with self.bot.session.get("https://api.edamam.com/search?q="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
+            t = await r.json()
         if not t['hits']:
             return await ctx.send("No Recipes Found")
         recipe = t['hits'][0]["recipe"]

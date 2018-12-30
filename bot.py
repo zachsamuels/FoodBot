@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncpg
 import asyncio
 import time
+import aiohttp
 
 bot = commands.Bot(command_prefix="food!")
 
@@ -42,6 +43,7 @@ async def on_ready():
     bot.db = await asyncpg.create_pool(**credentials) 
     bot.launch_time = time.time()
     bot.counter = 0
+    bot.session = aiohttp.ClientSession()
     await bot.change_presence(activity=discord.Game(name="food!help")) 
     print("Ready!")
 
