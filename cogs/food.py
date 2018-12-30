@@ -75,7 +75,8 @@ class Food:
         c = ", ".join(cautions)
         blue = discord.Color.blue()
         e = discord.Embed(title="Nutrition Facts",description = search.title(), url = url, color = blue)
-        e.add_field(name= "Calories",value = calories)
+        if calories:
+            e.add_field(name= "Calories",value = calories)
         if d:
             e.add_field(name="Diet and Health Labels", value = d)
         if c:
