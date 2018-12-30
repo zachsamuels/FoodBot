@@ -69,7 +69,7 @@ class Food:
         nuts = list()
         for x in n:
             e = n.get(x)
-            nuts.append(e.get("label") + " - " + str(int(e.get("quantity"))) + e.get("unit"))
+            nuts.append(e.get("label") + " - " + str(int(e.get("quantity"))) + e.get("unit") + "\n")
         nutrients = " - ".join(nuts)
         d = ", ".join(health) + ", " + ", ".join(diet) if diet else ", ".join(health)
         c = ", ".join(cautions)
