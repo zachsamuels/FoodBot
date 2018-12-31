@@ -55,6 +55,7 @@ class Food:
 
     @commands.command(aliases = ["fs","foodsearch","nutrition"])
     async def food(self, ctx, *, search):
+        """Gives nutritional value of what you searched"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
         app_id = data['food_id']
         app_key = data['food_key']

@@ -120,11 +120,13 @@ class Info:
 
     @commands.command()
     async def upvote(self, ctx):
+        """Sends a link to upvote the bot"""
         await ctx.send("https://discordbots.org/bot/528131615680102410")
 
     @commands.command()
     async def donate(self, ctx):
+        """Sends a link to donate to me"""
         await ctx.send("https://www.patreon.com/capn")
-        
+
 def setup(bot):
     bot.add_cog(Info(bot))
