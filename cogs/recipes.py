@@ -11,10 +11,24 @@ class Recipe:
     async def recipe(self, ctx, *, search):
         """Gives a recipe for your search along with Nutritional Facts"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
-        app_id = data['recipe_id']
-        app_key = data['recipe_key']
-        async with self.bot.session.get("https://api.edamam.com/search?q="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
-            t = await r.json()
+        app_ids = data['recipe_id']
+        app_keys = data['recipe_key']
+        f = False
+        c = 0
+        while not f:
+            try:
+                app_id = app_ids[c]
+                app_key = app_keys[c]
+            except:
+                return await ctx.send("Ratelimited, try again in one minute.")
+            else:
+                async with self.bot.session.get("https://api.edamam.com/search?q="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
+                    try:
+                        t = await r.json()
+                    except:
+                        c+=1
+                    else:
+                        f = True
         if not t['hits']:
             return await ctx.send("No Recipes Found")
         recipe = t['hits'][0]["recipe"]
