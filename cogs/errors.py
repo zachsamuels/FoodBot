@@ -53,7 +53,8 @@ class CommandErrorHandler:
             return await ctx.send('I could not find that member. Please try again.')
         
         elif isinstance(error, commands.errors.MissingPermissions):
-            return await ctx.send("You are missing the " +error.missing_perms +" Permission which is required to use this command")
+            missing = "\n".join(error.missing_perms)
+            return await ctx.send("You are missing the following permission/s, which is/are required to use this command: "+ missing)
         
         await ctx.message.add_reaction("\U0000274c")
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
