@@ -46,6 +46,7 @@ async def on_ready():
     bot.launch_time = time.time()
     bot.counter = 0
     bot.session = aiohttp.ClientSession()
+    bot.owner = bot.get_user(422181415598161921)
     await bot.change_presence(activity=discord.Game(name="food!help")) 
     print("Ready!")
 
