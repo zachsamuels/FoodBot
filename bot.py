@@ -17,6 +17,7 @@ async def set_up_token():
 @bot.command()
 async def echo(ctx, *, repeat):
     """Repeats your Message"""
+    repeat = repeat.replace("@", "@​")
     await ctx.send(repeat)
     
 @bot.command()
