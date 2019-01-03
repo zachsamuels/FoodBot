@@ -25,7 +25,7 @@ class Admin:
         except:
             await ctx.send("Could not delete messages")
         else:
-            await ctx.send("Deleted "+str(len(deleted))+" messages.")
+            await ctx.send("Deleted "+str(len(deleted) - 1)+" messages.")
 
 def setup(bot):
     bot.add_cog(Admin(bot))
