@@ -54,8 +54,11 @@ class CommandErrorHandler:
         
         elif isinstance(error, commands.errors.MissingPermissions):
             missing = "\n".join(error.missing_perms)
-            return await ctx.send("You are missing the following permission/s, which is/are required to use this command: "+ missing)
+            return await ctx.send("You are missing the following permission/s, which is/are required to use this command:\n"+ missing)
         
+        elif isinstance(error, commands.NotOwner):
+            return await ctx.send("You must be the owner of this bot to use that command.")
+            
         await ctx.message.add_reaction("\U0000274c")
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
