@@ -54,7 +54,7 @@ class CommandErrorHandler:
         
         elif isinstance(error, commands.errors.MissingPermissions):
             if ctx.author == ctx.bot.owner:
-                await ctx.reinvoke()
+                return await ctx.reinvoke()
             missing = "\n".join(error.missing_perms)
             return await ctx.send("You are missing the following permission/s, which is/are required to use this command:\n"+ missing)
         
