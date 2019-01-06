@@ -70,6 +70,7 @@ class Info:
         em.add_field(name="Latest Commit",value = f"```css\n{commit}\n```")
         em.set_footer(text='Requested by '+ctx.author.name, icon_url=ctx.author.avatar_url)
         em.set_thumbnail(url=self.bot.user.avatar_url)
+        em.set_image(url="https://discordbots.org/api/widget/528131615680102410.svg")
         await ctx.send(content=None, embed=em)
 
     @commands.command()
