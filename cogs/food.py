@@ -55,7 +55,7 @@ class Food:
 
     @commands.command(aliases = ["fs","foodsearch","nutrition"])
     async def food(self, ctx, *, search):
-        """Gives nutritional value of what you searched"""
+        """Gives nutritional value of the food you search foor (Make sure to include amount)"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
         app_id = data['food_id']
         app_key = data['food_key']
@@ -70,20 +70,21 @@ class Food:
         nuts = list()
         for x in n:
             e = n.get(x)
-            nuts.append(e.get("label") + " - " + str(int(e.get("quantity"))) + e.get("unit") + "\n")
-        nutrients = " - ".join(nuts)
+            if int(e.get("quantity")):
+                nuts.append(e.get("label") + " - " + str(int(e.get("quantity"))) + e.get("unit") + "\n")
+        nutrients = " - " + " - ".join(nuts)
         d = ", ".join(health) + ", " + ", ".join(diet) if diet else ", ".join(health)
         c = ", ".join(cautions)
         blue = discord.Color.blue()
         e = discord.Embed(title="Nutrition Facts",description = search.title(), url = url, color = blue)
-        if calories:
-            e.add_field(name= "Calories",value = calories)
+        if not calories or not nutrients:
+            return await ctx.send("Please use a valid food and specify a valid amount. `Example: food!food 1 cup of peanut butter`")
+        e.add_field(name= "Calories",value = calories)
         if d:
             e.add_field(name="Diet and Health Labels", value = d)
         if c:
             e.add_field(name="Cautions", value = c)
-        if nutrients:
-            e.add_field(name ="Nutrients",value = nutrients, inline = False)
+        e.add_field(name ="Nutrients",value = nutrients, inline = False)
         e.set_footer(text="Requested by "+ ctx.author.name, icon_url=ctx.author.avatar_url)
         await ctx.send(embed=e)
 
