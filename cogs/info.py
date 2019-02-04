@@ -31,7 +31,6 @@ class Info:
         return fmt.format(d=days, h=hours, m=minutes, s=seconds)
 
     @commands.command(aliases=["about"])
-    @commands.guild_only()
     async def botinfo(self, ctx):
         'Gives Bot Info'
 
@@ -100,7 +99,6 @@ class Info:
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
         """Shows help about a command or the bot"""
-
         try:
             if command is None:
                 p = await HelpPaginator.from_bot(ctx)
