@@ -52,6 +52,8 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    if message.content in ("<@528131615680102410>", "@Food Bot"):
+        await message.channel.send("Hello! I am a bot for foodies on discord. To learn how to use me, type food!help")
     if not message.author.bot:
         await bot.process_commands(message)
 
