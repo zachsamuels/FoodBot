@@ -33,6 +33,7 @@ class Recipe:
             return await ctx.send("No Recipes Found")
         recipe = t['hits'][0]["recipe"]
         name = recipe['label']
+        image = recipe['image']
         time = str(int(recipe['totalTime'])) + " minutes"
         servings = str(int(recipe['yield'])) + " servings"
         url = recipe['shareAs']
@@ -52,6 +53,7 @@ class Recipe:
         general.add_field(name= "Time to Make", value= time)
         general.add_field(name="Servings",value=servings)
         general.add_field(name= "Ingredients", value=ingredients, inline = False)
+        general.set_thumbnail(url=image)
         nutrition = discord.Embed(title = name, description="Nutrition Facts",url=url,color=green)
         nutrition.add_field(name="Health and Diet",value=d)
         nutrition.add_field(name="Calories", value=calories)
