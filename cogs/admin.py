@@ -10,11 +10,11 @@ class Admin:
     @commands.command()
     @commands.is_owner()
     async def mellow(self, ctx, *, code):
-        with open("home/zachary/mellow/test.mlw", 'w') as f:
+        with open("/home/zachary/mellow/test.mlw", 'w') as f:
             f.write(code)
             f.close()
         def runshell(code):
-            with subprocess.Popen(["/bin/bash", "-c", "python3 home/zachary/mellow/mellow.py home/zachary/mellow/test.mlw"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
+            with subprocess.Popen(["/bin/bash", "-c", "python3 /home/zachary/mellow/mellow.py /home/zachary/mellow/test.mlw"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
                 out, err = process.communicate(timeout=60)
                 if err:
                     return [f"```fix\n{code}``` ```fix\n-- stdout --\n\n{out.decode()}``` ```fix\n-- stderr --\n\n{err.decode()}```", out.decode(), err.decode()]
