@@ -3,12 +3,17 @@ from discord.ext import commands
 import subprocess
 import aiohttp
 
+async def is_admin(ctx):
+    return ctx.author.id in (422181415598161921, 300088143422685185)
+
 class Admin:
     def __init__(self, bot):
         self.bot = bot
 
+
+
     @commands.command()
-    @commands.is_owner()
+    @commands.check(is_admin)
     async def mellow(self, ctx, *, code):
         with open("/home/zachary/mellow/test.mlw", 'w') as f:
             f.write(code)
