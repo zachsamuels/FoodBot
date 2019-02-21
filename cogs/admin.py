@@ -30,6 +30,7 @@ class Admin:
                     post = await post.json()
                     await ctx.send(f"**:white_check_mark: | http://mystb.in/{post['key']}**")
             except Exception:
+                print(result[0])
                 await ctx.send("**:x: | Couldn't upload to Mystbin.**") 
 
     @commands.command()
