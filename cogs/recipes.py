@@ -92,7 +92,7 @@ class Recipe(commands.Cog):
         async with self.bot.session.get("https://www.instagram.com/buzzfeedtasty/") as r:
             text = await r.text()
         x = re.findall('"shortcode":".{11,12}"', text)
-        codes = list
+        codes = list()
         for z in x:
             z = "{"+z+"}"
             y = eval(z)
