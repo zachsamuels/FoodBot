@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import asyncio
 import aiohttp
+import random
+import re
 
 class Recipe(commands.Cog):
     def __init__(self, bot):
@@ -84,6 +86,20 @@ class Recipe(commands.Cog):
                     x = int(not x)
                 em = embeds[x]
                 await message.edit(embed = em)    
+
+    @commands.command()
+    async def tasty(self, ctx):
+        async with self.bot.session.get("https://www.instagram.com/buzzfeedtasty/") as r:
+            text = await r.text()
+        x = re.findall('"shortcode":".{11,12}"', text)
+        codes = list
+        for z in x:
+            z = "{"+z+"}"
+            y = eval(z)
+            codes.append(y["shortcode"])
+        code = random.choice(codes)
+        await ctx.send("https://www.instagram.com/p/"+code+"/")
+
 
 def setup(bot):
     bot.add_cog(Recipe(bot))
