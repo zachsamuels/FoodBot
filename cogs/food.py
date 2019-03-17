@@ -4,7 +4,7 @@ import aiohttp
 import random
 import asyncio
 
-class Food:
+class Food(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

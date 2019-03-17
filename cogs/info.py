@@ -7,7 +7,7 @@ import inspect
 import git 
 from .paginator import Pages, HelpPaginator, CannotPaginate
 
-class Info:
+class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.process = psutil.Process()

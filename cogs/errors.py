@@ -7,7 +7,7 @@ import json
 from asyncpg import exceptions
 import asyncio
 
-class CommandErrorHandler:
+class CommandErrorHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

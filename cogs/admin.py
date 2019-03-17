@@ -6,11 +6,9 @@ import aiohttp
 async def is_admin(ctx):
     return ctx.author.id in (422181415598161921, 300088143422685185)
 
-class Admin:
+class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-
 
     @commands.command()
     @commands.check(is_admin)
