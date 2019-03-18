@@ -38,7 +38,7 @@ async def ping(ctx):
 @bot.event
 async def on_ready():
     bot.load_extension("jishaku")
-    exts = ["recipes", "info", "food", "errors", "admin"]
+    exts = ["recipes", "info", "food", "errors", "admin", "restaurants"]
     for ext in exts:
         bot.load_extension("cogs."+ext)
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
