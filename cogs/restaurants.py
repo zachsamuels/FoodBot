@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import asyncio
+import datetime
 
 class Restaurants(commands.Cog):
     def __init__(self, bot):
@@ -40,7 +41,8 @@ class Restaurants(commands.Cog):
         em.add_field(name="Avg. Cost per 2 People", value=cost)
         em.add_field(name="Rating", value=rating, inline=False)
         revem = discord.Embed(title=name, description="Reviews", url=url, color=discord.Color(color))
-        for review in reviews:
+        for rev in reviews:
+            review = rev["review"]
             user_name = review["user"]["name"]
             rating = review["rating"]
             rating_text = review["rating_text"]
