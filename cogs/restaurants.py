@@ -32,9 +32,9 @@ class Restaurants(commands.Cog):
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/reviews?res_id="+restaurant_id, headers=headers) as r:
             data = await r.json()
         try:
-            reviews = random.sample(data["all_reviews"], 3)
-        except:
-            reviews = data
+            reviews = random.sample(data["user_reviews"], 5)
+        except ValueError:
+            reviews = data["user_reviews"]
         em = discord.Embed(title=name, description="Cuisine: "+cuisine, url=url, color=discord.Color(color))
         em.add_field(name="Address", value=address)
         em.add_field(name="Avg. Cost per 2 People", value=cost)
