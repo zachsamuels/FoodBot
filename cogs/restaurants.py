@@ -48,7 +48,7 @@ class Restaurants(commands.Cog):
             timestamp = datetime.datetime(review["timestamp"]).strftime('%b %d, %Y')
             revem.add_field(name=rating+ " - " + rating_text, value= review_text + "\n" + "    -" + user_name + " | " + timestamp)
         embeds = {0:em, 1:revem}
-        embed = 0
+        x = 0
         message = await ctx.send(embed=em)
         def check(reaction,user):
             return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == message.id
