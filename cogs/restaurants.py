@@ -12,7 +12,7 @@ class Restaurants(commands.Cog):
         data = await self.bot.db.fetchrow("SELECT * from keys;")
         key = data["zomato_key"]
         headers = {"user_key":key}
-        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?count=100&query="+search, headers=headers) as r:
+        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?count=100&query="+location, headers=headers) as r:
             data = await r.json()
             city = str(data["location_suggestions"][0]["city_id"])
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type=city&entity_id="+city, headers=headers) as r:
