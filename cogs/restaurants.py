@@ -34,7 +34,7 @@ class Restaurants(commands.Cog):
         try:
             reviews = random.sample(data["all_reviews"], 3)
         except:
-            reviews = data["all_reviews"]
+            reviews = data
         em = discord.Embed(title=name, description="Cuisine: "+cuisine, url=url, color=discord.Color(color))
         em.add_field(name="Address", value=address)
         em.add_field(name="Avg. Cost per 2 People", value=cost)
