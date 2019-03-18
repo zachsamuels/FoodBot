@@ -23,21 +23,22 @@ class Restaurants(commands.Cog):
             restaurant = random.choice(data["restaurants"])["restaurant"]
         name = restaurant["name"]
         url = restaurant["url"]
+        restaurant_id = restaurant["id"]
         address = restaurant["location"]["address"]
         cuisine = restaurant["cuisines"]
         cost = restaurant["average_cost_for_two"]
         color = int(restaurant["user_rating"]["rating_color"], 16)
         rating = restaurant["user_rating"]["aggregate_rating"]
-        number = restaurant["phone_numbers"]
+        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/reviews?res_id="+restaurant_id, headers=headers) as r:
+            data = await r.json()
         try:
-            reviews = random.sample(restaurant["all_reviews"], 3)
+            reviews = random.sample(data["all_reviews"], 3)
         except:
             reviews = restaurant["all_reviews"]
         em = discord.Embed(title=name, description="Cuisine: "+cuisine, url=url, color=discord.Color(color))
         em.add_field(name="Address", value=address)
         em.add_field(name="Avg. Cost per 2 People", value=cost)
         em.add_field(name="Rating", value=rating, inline=False)
-        em.add_field(name="Phone Number", value=number)
         revem = discord.Embed(title=name, description="Reviews", url=url, color=discord.Color(color))
         for review in reviews:
             user_name = review["user"]["name"]
@@ -47,7 +48,7 @@ class Restaurants(commands.Cog):
             timestamp = datetime.datetime(review["timestamp"]).strftime('%b %d, %Y')
             revem.add_field(name=rating+ " - " + rating_text, value= review_text + "\n" + "    -" + user_name + " | " + timestamp)
         embeds = {0:em, 1:revem}
-        x = 0
+        embed = 0
         message = await ctx.send(embed=em)
         def check(reaction,user):
             return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == message.id
