@@ -47,7 +47,7 @@ class Restaurants(commands.Cog):
             rating = review["rating"]
             rating_text = review["rating_text"]
             review_text = review["review_text"]
-            timestamp = datetime.datetime(review["timestamp"]).strftime('%b %d, %Y')
+            timestamp = datetime.datetime.fromtimestamp(review["timestamp"]).strftime('%b %d, %Y')
             revem.add_field(name=rating+ " - " + rating_text, value= review_text + "\n" + "    -" + user_name + " | " + timestamp)
         embeds = {0:em, 1:revem}
         x = 0
