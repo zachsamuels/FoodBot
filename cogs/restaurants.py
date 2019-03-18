@@ -44,7 +44,7 @@ class Restaurants(commands.Cog):
         for rev in reviews:
             review = rev["review"]
             user_name = review["user"]["name"]
-            rating = review["rating"]
+            rating = str(review["rating"])
             rating_text = review["rating_text"]
             review_text = review["review_text"]
             timestamp = datetime.datetime.fromtimestamp(review["timestamp"]).strftime('%b %d, %Y')
