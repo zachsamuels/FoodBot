@@ -7,15 +7,17 @@ class Restaurants(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def restaurant(self, ctx,*, location):
-        '''Gives information on a random restaurant from the location given'''
+    async def restaurant(self, ctx, *, location):
         data = await self.bot.db.fetchrow("SELECT * from keys;")
         key = data["zomato_key"]
         headers = {"user_key":key}
-        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?count=100&query="+location, headers=headers) as r:
+        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?query="+location, headers=headers) as r:
             data = await r.json()
             city = str(data["location_suggestions"][0]["city_id"])
-        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type=city&entity_id="+city, headers=headers) as r:
+        start = str(random.randint(0,80))
+        sort = random.choice(["cost","rating"])
+        order = random.choice(["asc","dec"])
+        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type=city&sort="+sort+"&order="+order+"&start="+start+"&entity_id="+city, headers=headers) as r:
             data = await r.json()
             restaurant = random.choice(data["restaurants"])["restaurant"]
         name = restaurant["name"]
@@ -30,6 +32,7 @@ class Restaurants(commands.Cog):
         em.add_field(name="Avg. Cost per 2 People", value=cost)
         em.add_field(name="Rating", value=rating, inline=False)
         await ctx.send(embed=em)
+
 
 def setup(bot):
     bot.add_cog(Restaurants(bot))
