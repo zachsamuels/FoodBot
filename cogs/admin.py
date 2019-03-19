@@ -66,16 +66,19 @@ class Admin(commands.Cog):
             data = await r.json(content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
         if not date:
+            day = int(datetime.datetime.now().strftime('%w'))
             days = (datetime.datetime.now() - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
             time_struct, parse_strust = self.cal.parse(date)
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                days = (datetime.datetime(*time_struct[:6])- datetime.datetime.fromtimestamp(first_date)).days + 1
+                datetime_date = datetime.datetime(*time_struct[:6])
+                days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
+                day = int(datetime_date.strftime('%w'))
                 if days < 0:
                     return await ctx.send("The date given is before the first recorded lunch this year.")
-        weeks, day = divmod(days, 7)
+        weeks, d = divmod(days, 7)
         try:
             today = data['menu']['menu']['items'][weeks][day][1]
         except IndexError:
@@ -88,7 +91,7 @@ class Admin(commands.Cog):
         categories = [soups, salad, deli, main, dessert]
         names = ["Soups", "Salad Bar", "Deli Bar", "Main Course", "Dessert"]
         color = discord.Color.green()
-        em = discord.Embed(title="Menu For Lunch", description=datetime.datetime.now().strftime('%b %d, %Y'), color=color)
+        em = discord.Embed(title="Menu For Lunch", description=datetime.datetime(*time_struct[:6]).strftime('%b %d, %Y'), color=color)
         for i, category in enumerate(categories):
             name = names[i]
             foods = ""
