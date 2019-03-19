@@ -53,7 +53,7 @@ class Admin(commands.Cog):
     async def lunch(self, ctx):
         """Shows what is for lunch at Capn's School today. (Why would you use this command tbh)"""
         async with self.bot.session.get("http://www.sagedining.com/intranet/apps/mb/pubasynchhandler.php?unitId=S0097&mbMenuCardinality=0&_=1553019503735") as r:
-            data = await r.json()
+            data = await r.json(content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
         days = (datetime.datetime.now()- datetime.datetime.fromtimestamp(first_date)).days + 1
         weeks, day = divmod(days, 7)
