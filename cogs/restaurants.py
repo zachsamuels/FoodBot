@@ -33,26 +33,20 @@ class Restaurants(commands.Cog):
                             await ctx.send("r=False (rand not in true/false)")
                         else:
                             await ctx.send("r=True")
-                            rand = bool(rand.capitalize())
+                            rand = rand.capitalize() == "True"
                             r = True
                     else:
                         await ctx.send("r=False (rand is None)")
                         r = False
                     query = query.replace(" ", "%20")
-                    if r:
-                        if not rand:
-                            await ctx.send("r is True and rand is False")
-                            async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                                data = await r.json()
-                                restaurant = data["restaurants"][0]["restaurant"]    
-                        else:  
-                            async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                                await ctx.send("r is True and rand is True")
-                                data = await r.json()
-                                restaurant = random.choice(data["restaurants"])["restaurant"]                       
+                    if r and not rand:
+                        await ctx.send("NOT RANDOM")
+                        async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
+                            data = await r.json()
+                            restaurant = data["restaurants"][0]["restaurant"]                            
                     else:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                            await ctx.send("r is False")
+                            await ctx.send("QUERY AND RANDOM")
                             data = await r.json()
                             restaurant = random.choice(data["restaurants"])["restaurant"]    
                 else:
