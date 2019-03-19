@@ -33,6 +33,7 @@ class Restaurants(commands.Cog):
                     data = await r.json()
             try:
                 if query:
+                    await ctx.send(query)
                     restaurant = data["restaurants"][0]["restaurant"]
                 else:
                     restaurant = random.choice(data["restaurants"])["restaurant"]
