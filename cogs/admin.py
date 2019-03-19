@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import subprocess
 import aiohttp
+import datetime
 
 async def is_admin(ctx):
     return ctx.author.id in (422181415598161921, 300088143422685185)
@@ -47,6 +48,32 @@ class Admin(commands.Cog):
             await ctx.send("Could not delete messages")
         else:
             await ctx.send("Deleted "+str(len(deleted) - 1)+" messages.")
+
+    @commands.command()
+    async def lunch(self, ctx):
+        """Shows what is for lunch at Capn's School today. (Why would you use this command tbh)"""
+        async with self.bot.session.get("http://www.sagedining.com/intranet/apps/mb/pubasynchhandler.php?unitId=S0097&mbMenuCardinality=0&_=1553019503735") as r:
+            data = await r.json()
+        first_date = int(data['menuList'][0]['menuFirstDate'])
+        days = (datetime.datetime.now()- datetime.datetime.fromtimestamp(first_date)).days + 1
+        weeks, day = divmod(days, 7)
+        today = data['menu']['menu']['items'][weeks][day][1]
+        soups = today[0]
+        salad = today[1]
+        deli = today[2]
+        main = today[3]
+        dessert = today[8]
+        categories = [soups, salad, deli, main, dessert]
+        names = ["Soups", "Salad Bar", "Deli Bar", "Main Course", "Dessert"]
+        color = discord.Color.green()
+        em = discord.Embed(title="Menu For Lunch", description=datetime.datetime.now().strftime('%b %d, %Y'), color=color)
+        for category, i in enumerate(categories):
+            name = names[i]
+            foods = ""
+            for food in category:
+                foods += food["a"] + "\n"
+            em.add_field(name=name, value=foods, inline=False)
+        await ctx.send(embed=em)
 
 def setup(bot):
     bot.add_cog(Admin(bot))
