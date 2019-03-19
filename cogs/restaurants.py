@@ -17,19 +17,19 @@ class Restaurants(commands.Cog):
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?query="+city, headers=headers) as r:
             data = await r.json()
         try:
-            city = str(data["location_suggestions"][0]["city_id"])
+            entity_type = str(data["location_suggestions"][0]["entity_type"])
+            entity_id = str(data["location_suggestions"][0]["entity_id"])
         except IndexError:
             return await ctx.send("This city/location was not found.")
         else:
-            start = str(random.randint(0,80))
             sort = random.choice(["cost","rating"])
             order = random.choice(["asc","dec"])
             if query:
                 query = query.replace(" ", "%20")
-                async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type=city&sort="+sort+"&order="+order+"&start="+start+"&entity_id="+city+"&q="+query, headers=headers) as r:
+                async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
                     data = await r.json()
             else:
-                async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type=city&sort="+sort+"&order="+order+"&start="+start+"&entity_id="+city, headers=headers) as r:
+                async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id, headers=headers) as r:
                     data = await r.json()
             try:
                 restaurant = random.choice(data["restaurants"])["restaurant"]
