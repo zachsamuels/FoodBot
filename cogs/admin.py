@@ -72,7 +72,7 @@ class Admin(commands.Cog):
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                days = (datetime.datetime(*time[:6])- datetime.datetime.fromtimestamp(first_date)).days + 1
+                days = (datetime.datetime(*time_struct[:6])- datetime.datetime.fromtimestamp(first_date)).days + 1
                 if days < 0:
                     return await ctx.send("The date given is before the first recorded lunch this year.")
         weeks, day = divmod(days, 7)
