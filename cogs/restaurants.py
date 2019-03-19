@@ -24,28 +24,30 @@ class Restaurants(commands.Cog):
         else:
             sort = random.choice(["cost","rating"])
             order = random.choice(["asc","dec"])
-            if rand:
-                if rand.lower() not in ("true", "false"):
-                    query = rand + " " + query
-                    r = False
-                else:
-                    rand = bool(rand.capitalize())
-                    r = True
-            else:
-                r = False
             try:
                 if query:
+                    if rand:
+                        if rand.lower() not in ("true", "false"):
+                            query = rand + " " + query
+                            r = False
+                        else:
+                            rand = bool(rand.capitalize())
+                            r = True
+                    else:
+                        r = False
                     query = query.replace(" ", "%20")
                     if r and not rand:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                            data = await r.json()                            
+                            data = await r.json()
+                            restaurant = data["restaurants"][0]["restaurant"]                            
                     else:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                                data = await r.json()    
+                            data = await r.json()
+                            restaurant = random.choice(data["restaurants"])["restaurant"]    
                 else:
                     async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id, headers=headers) as r:
                         data = await r.json()
-                restaurant = random.choice(data["restaurants"])["restaurant"]
+                        restaurant = random.choice(data["restaurants"])["restaurant"]
             except IndexError:
                 if query:
                     return await ctx.send("No restaurants were found with that query in that city/location.")
