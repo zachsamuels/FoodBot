@@ -3,3 +3,4 @@ jishaku
 gitpython
 asyncpg
 psutil
+parsedatetime

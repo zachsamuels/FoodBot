@@ -3,6 +3,7 @@ from discord.ext import commands
 import subprocess
 import aiohttp
 import datetime
+import parsedatetime
 
 async def is_admin(ctx):
     return ctx.author.id in (422181415598161921, 300088143422685185)
@@ -10,6 +11,7 @@ async def is_admin(ctx):
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.cal = parsedatetime.Calendar()
 
     @commands.command()
     @commands.check(is_admin)
@@ -40,6 +42,11 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def cleanup(self, ctx, limit:int=25):
+        """
+            Cleans up the chat of bot messages or messages that used a bot command.
+            (Only looks through the number of messages specified in the limit parameter,
+            which defaults to 25 messages.)
+        """
         def check(message):
             return message.content.startswith("food!") or message.author == self.bot.user
         try:
@@ -50,14 +57,29 @@ class Admin(commands.Cog):
             await ctx.send("Deleted "+str(len(deleted) - 1)+" messages.")
 
     @commands.command()
-    async def lunch(self, ctx):
-        """Shows what is for lunch at Capn's School today. (Why would you use this command tbh)"""
+    async def lunch(self, ctx, *, date=None):
+        """
+            Shows what is for lunch at Capn's School today, or on the optional date parameter.
+            (Why would you use this command tbh)
+        """
         async with self.bot.session.get("http://www.sagedining.com/intranet/apps/mb/pubasynchhandler.php?unitId=S0097&mbMenuCardinality=0&_=1553019503735") as r:
             data = await r.json(content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
-        days = (datetime.datetime.now()- datetime.datetime.fromtimestamp(first_date)).days + 1
+        if not date:
+            days = (datetime.datetime.now() - datetime.datetime.fromtimestamp(first_date)).days + 1
+        else:
+            time_struct, parse_strust = self.cal.parse(date)
+            if parse_strust != 1:
+                return await ctx.send("Your date string was not recognized.")
+            else:
+                days = (datetime.datetime(*time[:6])- datetime.datetime.fromtimestamp(first_date)).days + 1
+                if days < 0:
+                    return await ctx.send("The date given is before the first recorded lunch this year.")
         weeks, day = divmod(days, 7)
-        today = data['menu']['menu']['items'][weeks][day][1]
+        try:
+            today = data['menu']['menu']['items'][weeks][day][1]
+        except IndexError:
+            return await ctx.send("This date is too far in the future for a lunch to be planned.")
         soups = today[0]
         salad = today[1]
         deli = today[2]
@@ -72,7 +94,8 @@ class Admin(commands.Cog):
             foods = ""
             for food in category:
                 foods += food["a"] + "\n"
-            em.add_field(name=name, value=foods, inline=False)
+            if foods:
+                em.add_field(name=name, value=foods, inline=False)
         await ctx.send(embed=em)
 
 def setup(bot):
