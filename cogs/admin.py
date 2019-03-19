@@ -67,7 +67,7 @@ class Admin(commands.Cog):
         names = ["Soups", "Salad Bar", "Deli Bar", "Main Course", "Dessert"]
         color = discord.Color.green()
         em = discord.Embed(title="Menu For Lunch", description=datetime.datetime.now().strftime('%b %d, %Y'), color=color)
-        for category, i in enumerate(categories):
+        for i, category in enumerate(categories):
             name = names[i]
             foods = ""
             for food in category:
