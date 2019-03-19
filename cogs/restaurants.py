@@ -9,7 +9,7 @@ class Restaurants(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def restaurant(self, ctx, city, random=None, *, query=None):
+    async def restaurant(self, ctx, city, rand=None, *, query=None):
         '''Returns details about a restaurant from the city/location and (optional) query of a search keyword'''
         data = await self.bot.db.fetchrow("SELECT * from keys;")
         key = data["zomato_key"]
@@ -24,19 +24,19 @@ class Restaurants(commands.Cog):
         else:
             sort = random.choice(["cost","rating"])
             order = random.choice(["asc","dec"])
-            if random:
-                if random.lower() not in ("true", "false"):
-                    query = random + " " + query
+            if rand:
+                if rand.lower() not in ("true", "false"):
+                    query = rand + " " + query
                     r = False
                 else:
-                    random = bool(random.capitalize())
+                    rand = bool(rand.capitalize())
                     r = True
             else:
                 r = False
             try:
                 if query:
                     query = query.replace(" ", "%20")
-                    if r and not random:
+                    if r and not rand:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
                             data = await r.json()                            
                     else:
