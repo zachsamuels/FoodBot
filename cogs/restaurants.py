@@ -24,12 +24,15 @@ class Restaurants(commands.Cog):
         else:
             sort = random.choice(["cost","rating"])
             order = random.choice(["asc","dec"])
-            if random and random.lower() not in ("true", "false"):
-                query = random + " " + query
-                r = False
+            if random:
+                if random.lower() not in ("true", "false"):
+                    query = random + " " + query
+                    r = False
+                else:
+                    random = bool(random.capitalize())
+                    r = True
             else:
-                random = bool(random.capitalize())
-                r = True
+                r = False
             try:
                 if query:
                     query = query.replace(" ", "%20")

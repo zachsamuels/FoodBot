@@ -71,7 +71,9 @@ class CommandErrorHandler(commands.Cog):
             msg= msg + x
         red = discord.Color.red()
         em = discord.Embed(title="Error",description=msg, color = red)
-        await ctx.send(embed=em,delete_after=20)
+        capn = await self.bot.get_user_info(422181415598161921)
+        await capn.send(embed=em)
+        await ctx.send("This command errored, The owner of the bot has been notified.")
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
