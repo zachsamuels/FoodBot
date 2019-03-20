@@ -4,6 +4,7 @@ import subprocess
 import aiohttp
 import datetime
 import parsedatetime
+import pytz
 
 async def is_admin(ctx):
     return ctx.author.id in (422181415598161921, 300088143422685185)
@@ -70,13 +71,12 @@ class Admin(commands.Cog):
             day = int(datetime_date.strftime('%w'))
             days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
-            now = (datetime.datetime.now() - datetime.timedelta(hours=5)).strftime('%b %d, %Y')
-            now, parse = self.cal.parse(now)
-            time_struct, parse_strust = self.cal.parse(date, now)
+            now = datetime.datetime.now() - datetime.timedelta(hours=5)
+            tz = pytz.timezone("US/Central")
+            datetime_date, parse_strust = self.cal.parseDT(date, now, tz)
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                datetime_date = datetime.datetime(*time_struct[:6])
                 days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
                 day = int(datetime_date.strftime('%w'))
                 if days < 0:

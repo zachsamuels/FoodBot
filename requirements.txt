@@ -4,3 +4,4 @@ gitpython
 asyncpg
 psutil
 parsedatetime
+pytz
