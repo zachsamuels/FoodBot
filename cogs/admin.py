@@ -78,8 +78,10 @@ class Admin(commands.Cog):
             else:
                 days = (datetime_date.date() - datetime.datetime.fromtimestamp(first_date).date()).days + 1
                 day = int(datetime_date.strftime('%w'))
-                if days < 0:
-                    return await ctx.send("The date given is before the first recorded lunch this year.")
+        if days < 0:
+            return await ctx.send("The date given is before the first recorded lunch this year.")
+        if day in (0, 6):
+            return await ctx.send("That date is a weekend, so there isn't a lunch scheduled.")
         weeks, d = divmod(days, 7)
         try:
             today = data['menu']['menu']['items'][weeks][day][1]
@@ -101,6 +103,8 @@ class Admin(commands.Cog):
                 foods += food["a"] + "\n"
             if foods:
                 em.add_field(name=name, value=foods, inline=False)
+        if not em:
+            return await ctx.send("There is no lunch scheduled for this day, so it's probably a holiday.")
         await ctx.send(embed=em)
 
 def setup(bot):
