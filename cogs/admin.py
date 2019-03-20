@@ -72,12 +72,11 @@ class Admin(commands.Cog):
             days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
             now = datetime.datetime.now() - datetime.timedelta(hours=5)
-            tz = pytz.timezone("US/Central")
-            datetime_date, parse_strust = self.cal.parseDT(date, now, tz)
+            datetime_date, parse_strust = self.cal.parseDT(date, now)
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
+                days = (datetime_date.date() - datetime.datetime.fromtimestamp(first_date).date()).days + 1
                 day = int(datetime_date.strftime('%w'))
                 if days < 0:
                     return await ctx.send("The date given is before the first recorded lunch this year.")
