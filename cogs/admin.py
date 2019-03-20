@@ -66,8 +66,9 @@ class Admin(commands.Cog):
             data = await r.json(content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
         if not date:
-            day = int(datetime.datetime.now().strftime('%w'))
-            days = (datetime.datetime.now() - datetime.datetime.fromtimestamp(first_date)).days + 1
+            datetime_date = datetime.datetime.now()
+            day = int(datetime_date.strftime('%w'))
+            days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
             time_struct, parse_strust = self.cal.parse(date)
             if parse_strust != 1:
@@ -91,7 +92,7 @@ class Admin(commands.Cog):
         categories = [soups, salad, deli, main, dessert]
         names = ["Soups", "Salad Bar", "Deli Bar", "Main Course", "Dessert"]
         color = discord.Color.green()
-        em = discord.Embed(title="Menu For Lunch", description=datetime.datetime(*time_struct[:6]).strftime('%b %d, %Y'), color=color)
+        em = discord.Embed(title="Menu For Lunch", description=datetime_date.strftime('%b %d, %Y'), color=color)
         for i, category in enumerate(categories):
             name = names[i]
             foods = ""
