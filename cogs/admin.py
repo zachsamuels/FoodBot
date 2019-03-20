@@ -70,11 +70,13 @@ class Admin(commands.Cog):
             day = int(datetime_date.strftime('%w'))
             days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
-            time_struct, parse_strust = self.cal.parse(date)
+            now = (datetime.datetime.now() - datetime.timedelta(hours=5)).strftime('%b %d, %Y')
+            now, parse = self.cal.parse(now)
+            time_struct, parse_strust = self.cal.parse(date, now)
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                datetime_date = datetime.datetime(*time_struct[:6]) - datetime.timedelta(hours=5)
+                datetime_date = datetime.datetime(*time_struct[:6])
                 days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
                 day = int(datetime_date.strftime('%w'))
                 if days < 0:
