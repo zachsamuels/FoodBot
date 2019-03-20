@@ -66,7 +66,7 @@ class Admin(commands.Cog):
             data = await r.json(content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
         if not date:
-            datetime_date = datetime.datetime.now()
+            datetime_date = datetime.datetime.now() - datetime.timedelta(hours=5)
             day = int(datetime_date.strftime('%w'))
             days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
         else:
@@ -74,7 +74,7 @@ class Admin(commands.Cog):
             if parse_strust != 1:
                 return await ctx.send("Your date string was not recognized.")
             else:
-                datetime_date = datetime.datetime(*time_struct[:6])
+                datetime_date = datetime.datetime(*time_struct[:6]) - datetime.timedelta(hours=5)
                 days = (datetime_date - datetime.datetime.fromtimestamp(first_date)).days + 1
                 day = int(datetime_date.strftime('%w'))
                 if days < 0:
