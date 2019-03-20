@@ -86,12 +86,12 @@ class Admin(commands.Cog):
         except IndexError:
             return await ctx.send("This date is too far in the future for a lunch to be planned.")
         soups = today[0]
-        salad = today[1]
+        side = today[1]
         deli = today[2]
         main = today[3]
         dessert = today[8]
-        categories = [soups, salad, deli, main, dessert]
-        names = ["Soups", "Salad Bar", "Deli Bar", "Main Course", "Dessert"]
+        categories = [soups, side, deli, main, dessert]
+        names = ["Soups", "Side Dishes", "Deli Bar", "Main Course", "Dessert"]
         color = discord.Color.green()
         em = discord.Embed(title="Menu For Lunch", description=datetime_date.strftime('%b %d, %Y'), color=color)
         for i, category in enumerate(categories):
