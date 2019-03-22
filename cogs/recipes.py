@@ -4,6 +4,7 @@ import asyncio
 import aiohttp
 import random
 import re
+import ujson
 
 class Recipe(commands.Cog):
     def __init__(self, bot):
@@ -26,7 +27,7 @@ class Recipe(commands.Cog):
             else:
                 async with self.bot.session.get("https://api.edamam.com/search?q="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
                     try:
-                        t = await r.json()
+                        t = await r.json(loads=ujson.loads)
                     except:
                         c+=1
                     else:

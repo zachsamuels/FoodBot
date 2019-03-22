@@ -3,6 +3,7 @@ from discord.ext import commands
 import aiohttp
 import random
 import asyncio
+import ujson
 
 class Food(commands.Cog):
     def __init__(self, bot):
@@ -15,7 +16,7 @@ class Food(commands.Cog):
         client_id = data["imgur_id"]
         headers = {"Authorization" : "Client-ID "+ client_id}
         async with self.bot.session.get("https://api.imgur.com/3/gallery/r/foodporn/", headers=headers) as d:
-            j = await d.json()
+            j = await d.json(loads=ujson.loads)
         x = random.choice(j["data"])
         url = x["link"]
         name = x["title"]
@@ -60,7 +61,7 @@ class Food(commands.Cog):
         client_id = data["imgur_id"]
         headers = {"Authorization" : "Client-ID "+ client_id}
         async with self.bot.session.get("https://api.imgur.com/3/gallery/r/shittyfoodporn/", headers=headers) as d:
-            j = await d.json()
+            j = await d.json(loads=ujson.loads)
         x = random.choice(j["data"])
         url = x["link"]
         name = x["title"]
@@ -105,7 +106,7 @@ class Food(commands.Cog):
         app_id = data['food_id']
         app_key = data['food_key']
         async with self.bot.session.get("https://api.edamam.com/api/nutrition-data?ingr="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
-            t = await r.json()
+            t = await r.json(loads=ujson.loads)
         url = t.get("uri")
         diet = t.get("dietLabels")
         health = t.get("healthLabels")

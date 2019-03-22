@@ -5,6 +5,7 @@ import aiohttp
 import datetime
 import parsedatetime
 import pytz
+import ujson
 
 async def is_admin(ctx):
     return ctx.author.id in (422181415598161921, 300088143422685185)
@@ -64,7 +65,7 @@ class Admin(commands.Cog):
             (Why would you use this command tbh)
         """
         async with self.bot.session.get("http://www.sagedining.com/intranet/apps/mb/pubasynchhandler.php?unitId=S0097&mbMenuCardinality=0&_=1553019503735") as r:
-            data = await r.json(content_type='text/html')
+            data = await r.json(loads=ujson.loads, content_type='text/html')
         first_date = int(data['menuList'][0]['menuFirstDate'])
         if not date:
             datetime_date = datetime.datetime.now() - datetime.timedelta(hours=5)

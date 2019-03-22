@@ -3,6 +3,7 @@ from discord.ext import commands
 import random
 import asyncio
 import datetime
+import ujson
 
 class Restaurants(commands.Cog):
     def __init__(self, bot):
@@ -15,7 +16,7 @@ class Restaurants(commands.Cog):
         key = data["zomato_key"]
         headers = {"user_key":key}
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?query="+city, headers=headers) as r:
-            data = await r.json()
+            data = await r.json(loads=ujson.loads)
         try:
             entity_type = str(data["location_suggestions"][0]["entity_type"])
             entity_id = str(data["location_suggestions"][0]["entity_id"])
@@ -38,15 +39,15 @@ class Restaurants(commands.Cog):
                     query = query.replace(" ", "%20")
                     if r and not rand:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                            data = await r.json()
+                            data = await r.json(loads=ujson.loads)
                             restaurant = data["restaurants"][0]["restaurant"]                            
                     else:
                         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id+"&q="+query, headers=headers) as r:
-                            data = await r.json()
+                            data = await r.json(loads=ujson.loads)
                             restaurant = random.choice(data["restaurants"])["restaurant"]    
                 else:
                     async with self.bot.session.get("https://developers.zomato.com/api/v2.1/search?entity_type="+entity_type+"&sort="+sort+"&order="+order+"&entity_id="+entity_id, headers=headers) as r:
-                        data = await r.json()
+                        data = await r.json(loads=ujson.loads)
                         restaurant = random.choice(data["restaurants"])["restaurant"]
             except IndexError:
                 if query:
