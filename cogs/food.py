@@ -55,7 +55,7 @@ class Food(commands.Cog):
 
     @commands.command(aliases = ["sfp"])
     async def shittyfoodporn(self, ctx):
-        """Get a random r/FoodPorn Image"""
+        """Get a random r/ShittyFoodPorn Image"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
         client_id = data["imgur_id"]
         headers = {"Authorization" : "Client-ID "+ client_id}

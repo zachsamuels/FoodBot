@@ -89,6 +89,7 @@ class Recipe(commands.Cog):
 
     @commands.command()
     async def tasty(self, ctx):
+        """Shows a random BuzzFeed Tasty Instagram Post"""
         async with self.bot.session.get("https://www.instagram.com/buzzfeedtasty/") as r:
             text = await r.text()
         x = re.findall('"shortcode":".{11,12}"', text)
