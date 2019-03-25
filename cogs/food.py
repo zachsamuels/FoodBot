@@ -27,7 +27,7 @@ class Food(commands.Cog):
         message = await ctx.send(embed=e)
         emojis = ("\U000025b6","\U000023f9")
         def check(reaction,user):
-            return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == ctx.message.id
+            return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == message.id
         for emoji in emojis:
             await message.add_reaction(emoji)
         while True:
@@ -72,7 +72,7 @@ class Food(commands.Cog):
         message = await ctx.send(embed=e)
         emojis = ("\U000025b6","\U000023f9")
         def check(reaction,user):
-            return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == ctx.message.id
+            return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == message.id
         for emoji in emojis:
             await message.add_reaction(emoji)
         while True:

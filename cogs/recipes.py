@@ -62,11 +62,11 @@ class Recipe(commands.Cog):
         nutrition.add_field(name="Calories", value=calories)
         nutrition.add_field(name="Contains", value = n, inline = False)
         emojis = ("\U000025c0","\U000025b6","\U000023f9")
+        message = await ctx.send(embed=general)
         def check(reaction,user):
-            return user == ctx.author and str(reaction.emoji) in emojis
+            return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == message.id
         x = 0
         embeds = {0:general,1:nutrition}
-        message = await ctx.send(embed=general)
         for emoji in emojis:
             await message.add_reaction(emoji)
         while True:
