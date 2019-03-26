@@ -156,7 +156,7 @@ class Food(commands.Cog):
                         ingredient = drink['strIngredient' + str(i)]
                         ingredients.append(ingredient)
                 ings = '-' + '\n-'.join(ingredients)
-            except ValueError:
+            except (ValueError, TypeError):
                 return await ctx.send('This drink was not found.')
         green = discord.Color.green()
         em = discord.Embed(title=name, description=alcoholic, color=green)
