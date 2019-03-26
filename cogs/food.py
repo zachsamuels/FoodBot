@@ -149,10 +149,10 @@ class Food(commands.Cog):
                 alcoholic = drink['strAlcoholic']
                 ingredients = list()
                 for i in range(1, 15):
-                    if drink['strMeasure'+str(i)]:
+                    if drink['strMeasure'+str(i)].strip():
                         ingredient = drink['strMeasure'+str(i)] + 'of ' + drink['strIngredient' + str(i)]
                         ingredients.append(ingredient)
-                    elif drink['strIngredient'+str(i)]:
+                    elif drink['strIngredient'+str(i)].strip():
                         ingredient = drink['strIngredient' + str(i)]
                         ingredients.append(ingredient)
                 ings = '-' + '\n-'.join(ingredients)
