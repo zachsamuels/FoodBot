@@ -139,7 +139,7 @@ class Food(commands.Cog):
         search = search.replace(' ', '%20')
         async with self.bot.session.get('https://www.thecocktaildb.com/api/json/v1/1/search.php?s='+search) as r:
             try:
-                data = r.json()
+                data = await r.json()
                 drink = data['drinks'][0]
                 name = drink['strDrink']
                 image = drink['strDrinkThumb']
