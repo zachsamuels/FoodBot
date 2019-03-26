@@ -63,7 +63,7 @@ class Restaurants(commands.Cog):
         color = int(restaurant["user_rating"]["rating_color"], 16)
         rating = restaurant["user_rating"]["aggregate_rating"]
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/reviews?res_id="+restaurant_id, headers=headers) as r:
-            data = await r.json()
+            data = await r.json(loads=ujson.loads)
         try:
             reviews = random.sample(data["user_reviews"], 5)
         except ValueError:
@@ -116,7 +116,7 @@ class Restaurants(commands.Cog):
         authorization = {'Authorization': key}
         async with self.bot.session.get('https://api.yelp.com/v3/businesses/search?term='+term+'&location='+location, headers=authorization) as r:
             try:
-                data = await r.json()
+                data = await r.json(loads=ujson.loads)
                 business = data['businesses'][0]
                 business_id = business['id']
                 name = business['name']
@@ -127,7 +127,7 @@ class Restaurants(commands.Cog):
                 return await ctx.send("No restaurants found.")
         async with self.bot.session.get('https://api.yelp.com/v3/businesses/'+business_id+'/reviews', headers=authorization) as r:
             try:
-                data = await r.json()
+                data = await r.json(loads=ujson.loads)
                 reviews = data['reviews']
             except ValueError:
                 return await ctx.send("No reviews found.")
