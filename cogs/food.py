@@ -147,7 +147,7 @@ class Food(commands.Cog):
                 instructions = drink['strInstructions']
                 alcoholic = drink['strAlcoholic']
                 ingredients = list()
-                for i in range(15):
+                for i in range(1, 15):
                     if drink['strMeasure'+str(i)]:
                         ingredient = drink['strMeasure'+str(i)] + 'of ' + drink['strIndredient' + str(i)]
                         ingredients.append(ingredient)
