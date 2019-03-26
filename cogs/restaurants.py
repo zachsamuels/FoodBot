@@ -108,6 +108,41 @@ class Restaurants(commands.Cog):
                 em = embeds[x]
                 await message.edit(embed = em)
 
+    @commands.command(aliases=['reviews', 'yelpreviews', 'yr'])
+    async def yelp(self, ctx, location, *, term):
+        '''Looks for yelp review about restaurants matching the given term in the given location'''
+        data = await self.bot.db.fetchrow("SELECT * from keys;")
+        key = data['yelp_key']
+        authorization = {'Authorization': key}
+        async with self.bot.session.get('https://api.yelp.com/v3/businesses/search?term='+term+'&location='+location, headers=authorization) as r:
+            try:
+                data = await r.json()
+                business = data['businesses'][0]
+                business_id = business['id']
+                name = business['name']
+                address = business['location']['address1'] + ' ' + business['location']['zip_code'] + ', ' + business['location']['city']
+                url = business['url']
+                image = business['image_url']
+            except ValueError:
+                return await ctx.send("No restaurants found.")
+        async with self.bot.session.get('https://api.yelp.com/v3/businesses/'+business_id+'/reviews', headers=authorization) as r:
+            try:
+                data = await r.json()
+                reviews = data['reviews']
+            except ValueError:
+                return await ctx.send("No reviews found.")
+        green = discord.Color.green()
+        em = discord.Embed(title=name, description=address, color=green, url=url)
+        em.set_image(url=image)
+        for review in reviews:
+            user_name = review['user']['name']
+            rating = review['rating']
+            text = review['text']
+            created = review['time_created']
+            message = text + "\n    -" + user_name + " | " + created
+            em.add_field(name=rating, value=message, inline=False)
+        await ctx.send(embed=em)
+
 
 def setup(bot):
     bot.add_cog(Restaurants(bot))
