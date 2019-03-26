@@ -136,6 +136,7 @@ class Food(commands.Cog):
 
     @commands.command()
     async def cocktail(self, ctx, *, search):
+        '''Sends Instructions on how to make the cocktail specified in the given search'''
         search = search.replace(' ', '%20')
         async with self.bot.session.get('https://www.thecocktaildb.com/api/json/v1/1/search.php?s='+search) as r:
             try:
