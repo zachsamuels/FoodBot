@@ -134,7 +134,7 @@ class Food(commands.Cog):
         e.set_footer(text="Requested by "+ ctx.author.name, icon_url=ctx.author.avatar_url)
         await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.group(invoke_without_command=True)
     async def cocktail(self, ctx, *, search):
         '''Sends Instructions on how to make the cocktail specified in the given search'''
         search = search.replace(' ', '%20')
@@ -165,6 +165,37 @@ class Food(commands.Cog):
         em.add_field(name='Ingredients', value=ings, inline=False)
         em.add_field(name='Instructions', value=instructions, inline=False)
         await ctx.send(embed=em)
+    
+    @cocktail.command()
+    async def random(self, ctx):
+        async with self.bot.session.get('https://www.thecocktaildb.com/api/json/v1/1/random.php') as r:
+            try:
+                data = await r.json(loads=ujson.loads)
+                drink = data['drinks'][0]
+                name = drink['strDrink']
+                image = drink['strDrinkThumb']
+                glass = drink['strGlass']
+                instructions = drink['strInstructions']
+                alcoholic = drink['strAlcoholic']
+                ingredients = list()
+                for i in range(1, 15):
+                    if drink['strMeasure'+str(i)].strip():
+                        ingredient = drink['strMeasure'+str(i)] + 'of ' + drink['strIngredient' + str(i)]
+                        ingredients.append(ingredient)
+                    elif drink['strIngredient'+str(i)].strip():
+                        ingredient = drink['strIngredient' + str(i)]
+                        ingredients.append(ingredient)
+                ings = '-' + '\n-'.join(ingredients)
+            except (ValueError, TypeError):
+                return await ctx.send('This drink was not found.')
+        green = discord.Color.green()
+        em = discord.Embed(title=name, description=alcoholic, color=green)
+        em.set_image(url=image)
+        em.add_field(name='Glass to Use', value=glass, inline=False)
+        em.add_field(name='Ingredients', value=ings, inline=False)
+        em.add_field(name='Instructions', value=instructions, inline=False)
+        await ctx.send(embed=em)
+
 
 def setup(bot):
     bot.add_cog(Food(bot))
