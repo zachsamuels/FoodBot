@@ -144,7 +144,7 @@ class Food(commands.Cog):
                 name = drink['strDrink']
                 image = drink['strDrinkThumb']
                 glass = drink['strGlass']
-                instructions = drink['Instructions']
+                instructions = drink['strInstructions']
                 alcoholic = drink['strAlcoholic']
                 ingredients = list()
                 for i in range(15):
