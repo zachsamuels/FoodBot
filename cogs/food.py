@@ -163,6 +163,7 @@ class Food(commands.Cog):
         em.add_field(name='Glass to Use', value=glass, inline=False)
         em.add_field(name='Ingredients', value=ings, inline=False)
         em.add_field(name='Instructions', value=instructions, inline=False)
+        await ctx.send(embed=em)
 
 def setup(bot):
     bot.add_cog(Food(bot))
