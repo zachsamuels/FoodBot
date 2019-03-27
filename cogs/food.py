@@ -12,8 +12,7 @@ class Food(commands.Cog):
     @commands.command(aliases = ["fp"])
     async def foodporn(self, ctx):
         """Get a random r/FoodPorn Image"""
-        data = await self.bot.db.fetchrow("SELECT * FROM keys")
-        client_id = data["imgur_id"]
+        client_id = await self.bot.db.fetchval("SELECT imgur_id FROM keys")
         headers = {"Authorization" : "Client-ID "+ client_id}
         async with self.bot.session.get("https://api.imgur.com/3/gallery/r/foodporn/", headers=headers) as d:
             j = await d.json(loads=ujson.loads)
@@ -57,8 +56,7 @@ class Food(commands.Cog):
     @commands.command(aliases = ["sfp"])
     async def shittyfoodporn(self, ctx):
         """Get a random r/ShittyFoodPorn Image"""
-        data = await self.bot.db.fetchrow("SELECT * FROM keys")
-        client_id = data["imgur_id"]
+        client_id = await self.bot.db.fetchval("SELECT imgur_id FROM keys")
         headers = {"Authorization" : "Client-ID "+ client_id}
         async with self.bot.session.get("https://api.imgur.com/3/gallery/r/shittyfoodporn/", headers=headers) as d:
             j = await d.json(loads=ujson.loads)

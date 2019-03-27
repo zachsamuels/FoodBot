@@ -12,8 +12,7 @@ class Restaurants(commands.Cog):
     @commands.command()
     async def restaurant(self, ctx, city, rand=None, *, query=None):
         '''Returns details about a restaurant from the city/location and (optional) query of a search keyword'''
-        data = await self.bot.db.fetchrow("SELECT * from keys;")
-        key = data["zomato_key"]
+        key = await self.bot.db.fetchval("SELECT zomato_key from keys;")
         headers = {"user_key":key}
         async with self.bot.session.get("https://developers.zomato.com/api/v2.1/locations?query="+city, headers=headers) as r:
             data = await r.json(loads=ujson.loads)
@@ -111,8 +110,7 @@ class Restaurants(commands.Cog):
     @commands.command(aliases=['reviews', 'yelpreviews', 'yr'])
     async def yelp(self, ctx, location, *, term):
         '''Looks for yelp review about restaurants matching the given term in the given location'''
-        data = await self.bot.db.fetchrow("SELECT * from keys;")
-        key = data['yelp_key']
+        key = await self.bot.db.fetchval("SELECT yelp_key from keys;")
         authorization = {'Authorization': key}
         async with self.bot.session.get('https://api.yelp.com/v3/businesses/search?term='+term+'&location='+location, headers=authorization) as r:
             try:
