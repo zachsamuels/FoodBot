@@ -339,7 +339,7 @@ class HelpPaginator(Pages):
     async def from_cog(cls, ctx, cog):
 
         # get the commands
-        entries = sorted(cog.commands, key=lambda c: c.name)
+        entries = sorted(cog.get_commands(), key=lambda c: c.name)
 
         # remove the ones we can't run
         entries = [cmd for cmd in entries if (await _can_run(cmd, ctx)) and not cmd.hidden]
