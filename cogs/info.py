@@ -5,13 +5,15 @@ import time
 import psutil
 import inspect
 import git 
-from .paginator import Pages, HelpPaginator, CannotPaginate
+from .paginator import Pages, PaginatedHelpCommand, CannotPaginate
 
 class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.process = psutil.Process()
         bot.remove_command("help")
+        bot.help_command = PaginatedHelpCommand()
+        bot.help_command.cog = self
 
     def get_uptime(self, *, brief=False):
         now = time.time()
