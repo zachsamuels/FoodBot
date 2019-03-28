@@ -461,7 +461,6 @@ class PaginatedHelpCommand(commands.HelpCommand):
         # swap the get_page implementation to work with our nested pages.
         pages.get_page = pages.get_bot_page
         pages.total = total
-        await self.context.release()
         await pages.paginate()
 
     async def send_cog_help(self, cog):
@@ -470,7 +469,6 @@ class PaginatedHelpCommand(commands.HelpCommand):
         pages.title = f'{cog.qualified_name} Commands'
         pages.description = cog.description
 
-        await self.context.release()
         await pages.paginate()
 
     def common_command_formatting(self, page_or_embed, command):
@@ -495,5 +493,4 @@ class PaginatedHelpCommand(commands.HelpCommand):
         pages = HelpPaginator(self, self.context, entries)
         self.common_command_formatting(pages, group)
 
-        await self.context.release()
         await pages.paginate()
