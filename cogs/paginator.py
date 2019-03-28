@@ -345,7 +345,7 @@ class HelpPaginator(Pages):
         entries = [cmd for cmd in entries if (await _can_run(cmd, ctx)) and not cmd.hidden]
 
         self = cls(ctx, entries)
-        self.title = f'{cog_name} Commands'
+        self.title = f'{cog.qualified_name} Commands'
         self.description = inspect.getdoc(cog)
         self.prefix = cleanup_prefix(ctx.bot, ctx.prefix)
 
@@ -363,7 +363,7 @@ class HelpPaginator(Pages):
             entries = [cmd for cmd in entries if (await _can_run(cmd, ctx)) and not cmd.hidden]
 
         self = cls(ctx, entries)
-        self.title = command.signature
+        self.title = _command_signature(command)
 
         if command.description:
             self.description = f'{command.description}\n\n{command.help}'
