@@ -238,6 +238,7 @@ class Order(commands.Cog):
 
     @commands.command()
     async def add_address(self, ctx, key=None, street_address=None, zipcode=None, card_key=None):
+        '''Adds an address to your account'''
         data = await self.bot.db.fetchrow('SELECT * FROM order_keys WHERE user_id=$1', ctx.author.id)
         if not data:
             return await ctx.send('You need a registered account to add an address. Use the register command to make an account.')
@@ -301,6 +302,7 @@ class Order(commands.Cog):
 
     @commands.command()
     async def track_order(self, ctx, key):
+        '''Tracks an order'''
         api_key = await self.bot.db.fetchval('SELECT eatstreet from keys')
         auth = {'X-Access-Token': api_key, 'Content-Type': 'application/json'}
         async with self.bot.session.post('https://eatstreet.com/publicapi/v1/order/'+key+'/statuses', headers=auth) as r:
@@ -314,6 +316,7 @@ class Order(commands.Cog):
 
     @commands.command()
     async def remove_card(self, ctx):
+        '''Removes your card api key from the database'''
         data = await self.bot.db.fetchrow('SELECT * FROM order_keys WHERE user_id=$1', ctx.author.id)
         if not data:
             return await ctx.send('You need a registered account to remove a card. Use the register command to make an account.')
@@ -339,6 +342,7 @@ class Order(commands.Cog):
 
     @commands.command()
     async def remove_address(self, ctx):
+        '''Removes your address api key from the database'''
         data = await self.bot.db.fetchrow('SELECT * FROM order_keys WHERE user_id=$1', ctx.author.id)
         if not data:
             return await ctx.send('You need a registered account to remove an address. Use the register command to make an account.')
