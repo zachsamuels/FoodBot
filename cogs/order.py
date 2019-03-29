@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import datetime
-from paginator import Pages
+from .paginator import Pages
 import asyncio
 
 class Order(commands.Cog):
