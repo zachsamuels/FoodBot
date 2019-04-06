@@ -189,7 +189,7 @@ class Food(commands.Cog):
                 }
             ]
         }
-        async with self.bot.session.post("https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs", data=data, headers=headers) as r:
+        async with self.bot.session.post("https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs", json=data, headers=headers) as r:
             response = await r.json()
         concepts = " - " + "\n - ".join([concept["name"] + ": " + str(concept["value"])[:4] for concept in response["outputs"][0]["data"]["concepts"]])
         await ctx.send("I think these are in your image:\n"+concepts)
