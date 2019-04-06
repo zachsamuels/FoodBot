@@ -177,7 +177,7 @@ class Food(commands.Cog):
         except:
             return await ctx.send("You didn't send an attachment.")
         key = await self.bot.db.fetchval("SELECT clarifai FROM keys")
-        headers = {"Content-Type": "application/json", "Authorization": key}
+        headers = {"Content-Type": "application/json", "Authorization": "Key "+key}
         data = {
             "inputs": [
                 {
