@@ -170,5 +170,29 @@ class Food(commands.Cog):
         em.add_field(name='Instructions', value=instructions, inline=False)
         await ctx.send(embed=em)
 
+    @commands.command(aliases=["detect", "clarifai"])
+    async def ai(self, ctx):
+        try:
+            url = ctx.message.attachments[0].proxy_url
+        except:
+            return await ctx.send("You didn't send an attachment.")
+        key = await self.bot.db.fetchval("SELECT clarifai FROM keys")
+        headers = {"Content-Type": "application/json", "Authorization": key}
+        data = {
+            "inputs": [
+                {
+                    "data": {
+                        "image": {
+                            "url": url
+                        }
+                    }
+                }
+            ]
+        }
+        async with self.bot.session.post("https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs", data=data, headers=headers) as r:
+            response = await r.json()
+        concepts = " - " + "\n - ".join([concept["name"] + ": " + str(concept["value"])[:4] for concept in response["outputs"][0]["data"]["concepts"]])
+        await ctx.send("I think these are in your image:\n"+concepts)
+
 def setup(bot):
     bot.add_cog(Food(bot))

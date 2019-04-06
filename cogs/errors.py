@@ -53,7 +53,7 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, commands.BadArgument):
             return await ctx.send('I could not find that member. Please try again.')
         
-        elif isinstance(error, commands.errors.MissingPermissions):
+        elif isinstance(error, commands.MissingPermissions):
             if ctx.author == ctx.bot.owner:
                 return await ctx.reinvoke()
             missing = "\n".join(error.missing_perms)
