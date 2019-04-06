@@ -171,11 +171,13 @@ class Food(commands.Cog):
         await ctx.send(embed=em)
 
     @commands.command(aliases=["detect", "clarifai"])
-    async def ai(self, ctx):
-        try:
-            url = ctx.message.attachments[0].proxy_url
-        except:
-            return await ctx.send("You didn't send an attachment.")
+    async def ai(self, ctx, url=None):
+        '''Detects what food is in the image from the url or the first attachment'''
+        if not url:
+            try:
+                url = ctx.message.attachments[0].proxy_url
+            except:
+                return await ctx.send("You didn't send an attachment or a url.")
         key = await self.bot.db.fetchval("SELECT clarifai FROM keys")
         headers = {"Content-Type": "application/json", "Authorization": "Key "+key}
         data = {
@@ -191,7 +193,10 @@ class Food(commands.Cog):
         }
         async with self.bot.session.post("https://api.clarifai.com/v2/models/bd367be194cf45149e75f01d59f77ba7/outputs", json=data, headers=headers) as r:
             response = await r.json()
-        concepts = " - " + "\n - ".join([concept["name"] + ": " + str(concept["value"])[:4] for concept in response["outputs"][0]["data"]["concepts"]])
+        try:
+            concepts = " - " + "\n - ".join([concept["name"] + ": " + str(concept["value"])[:4] for concept in response["outputs"][0]["data"]["concepts"]])
+        except:
+            return await ctx.send("There was an error detecting food in your image.")
         await ctx.send("I think these are in your image:\n"+concepts)
 
 def setup(bot):
