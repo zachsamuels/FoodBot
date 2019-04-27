@@ -71,9 +71,13 @@ class CommandErrorHandler(commands.Cog):
             msg= msg + x
         red = discord.Color.red()
         em = discord.Embed(title="Error",description=msg, color = red)
-        em.add_field(name="Info", value=str(ctx.author.id) + "\n" + str(ctx.guild.id) + "\n" + ctx.command.qualified_name)
+        if ctx.guild:
+            g = str(ctx.guild.id)
+        else:
+            g = "No Guild"
+        em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
         capn = self.bot.get_user(422181415598161921)
-        await can.send(embed=em)
+        await capn.send(embed=em)
         await ctx.send("This command errored, The owner of the bot has been notified.")
 
 def setup(bot):
