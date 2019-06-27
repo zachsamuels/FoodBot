@@ -35,9 +35,7 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, commands.DisabledCommand):
             return await ctx.send(f'{ctx.command} has been disabled.')
 
-        elif isinstance(error, exceptions.NotNullViolationError):
-            return await ctx.send(f"User is not in the system. Use {ctx.prefix}start")
-
+     
         elif isinstance(error, asyncio.TimeoutError):
             return
 
@@ -48,10 +46,10 @@ class CommandErrorHandler(commands.Cog):
                 pass
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            return await ctx.send(f"You are missing an argument, use c!help {ctx.command} for more information!")
+            return await ctx.send(f"You are missing an argument, use food!help {ctx.command} for more information!")
 
         elif isinstance(error, commands.BadArgument):
-            return await ctx.send('I could not find that member. Please try again.')
+            return await ctx.send('You passed an incorrect argument, use food!help for more help on how to use this command.')
         
         elif isinstance(error, commands.MissingPermissions):
             if ctx.author == ctx.bot.owner:
