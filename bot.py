@@ -37,17 +37,20 @@ async def ping(ctx):
     
 @bot.event
 async def on_ready():
+    await bot.change_presence(activity=discord.Game(name="food!help")) 
     bot.load_extension("jishaku")
-    exts = ["recipes", "info", "food", "errors", "admin", "restaurants"]
-    for ext in exts:
+    exts = ["recipes", "info", "food", "errors", "admin", "restaurants", "images"]
+    try:
+     for ext in exts:
         bot.load_extension("cogs."+ext)
+        bot.launch_time = time.time()
+        bot.counter = 0
+    except:
+     pass
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
     bot.db = await asyncpg.create_pool(**credentials) 
-    bot.launch_time = time.time()
-    bot.counter = 0
     bot.session = aiohttp.ClientSession()
     bot.owner = bot.get_user(422181415598161921)
-    await bot.change_presence(activity=discord.Game(name="food!help")) 
     print("Ready!")
 
 @bot.event
