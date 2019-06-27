@@ -7,6 +7,9 @@ import discord
 from discord.ext import commands
 import time
 import numpy as np
+import pickle
+import asyncio
+import sys
 
 def sigmoid(i):
     return 9/(1 + math.exp(-i))
@@ -219,6 +222,14 @@ def process_transform(img1, img2):
     buff.seek(0)
     return buff
 
+def main():
+    sent = pickle.loads(sys.stdin.buffer.read())
+    data = do_depth(*sent)
+    stdout_write = sys.stdout.buffer.write
+    buff = data.getbuffer()
+    stdout_write(buff)
+    sys.exit(0)
+    
 class Images(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -236,7 +247,18 @@ class Images(commands.Cog):
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=size).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            buff = await self.bot.loop.run_in_executor(None, do_depth, img, rotate, method, jiggle, inverse)
+            to_send = pickle.dumps((img, rotate, method, jiggle, inverse))
+               
+            proc = await asyncio.create_subprocess_exec(
+                sys.executable, '-m', __name__,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE)
+            try:
+                data, err = await asyncio.wait_for(proc.communicate(image_data), timeout=30)
+            except:
+                proc.kill()
+            buff = BytesIO(data)
             t1 = round(time.perf_counter()-t,3)
             await ctx.send(f"Made in {t1}s", file = discord.File(buff,"depth.gif"))
 
@@ -259,3 +281,6 @@ class Images(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Images(bot))
+
+if __name__ == "__main__":
+    main()
