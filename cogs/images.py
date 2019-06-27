@@ -255,9 +255,10 @@ class Images(commands.Cog):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE)
             try:
-                data, err = await asyncio.wait_for(proc.communicate(image_data), timeout=30)
+                data, err = await asyncio.wait_for(proc.communicate(to_send), timeout=30)
             except:
                 proc.kill()
+                return await ctx.send("Process Errored, try again")
             buff = BytesIO(data)
             t1 = round(time.perf_counter()-t,3)
             await ctx.send(f"Made in {t1}s", file = discord.File(buff,"depth.gif"))
