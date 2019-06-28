@@ -242,7 +242,7 @@ class Images(commands.Cog):
         if user is None:
             user = ctx.author
         inverse = inverse == "True"
-        img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=size).read()))
+        img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
             to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur))
