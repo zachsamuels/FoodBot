@@ -128,13 +128,17 @@ def process_depth(img, r, type, jiggle, inverse, blur):
                     coords = (c[0]+j, c[1])
                 draw.line(((x,y),coords), fill=color)
             i-=1
-        en = ImageEnhance.Sharpness(im1)
-        im1 = en.enhance(blur)
+        if color != 1.0:
+            enhance = ImageEnhance.Color(im1)
+            im1 = enhance.enhance(color)
+        if blur != 1.0:
+            en = ImageEnhance.Sharpness(im1)
+            im1 = en.enhance(blur)
         frames.append(im1)
     frames += list(reversed(frames))
     return frames
     
-def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0):
+def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0, color=1.0):
     img = img.resize((256, 256), Image.NEAREST)
     if img.mode != "RGB":
         img = img.convert("RGB")
@@ -142,7 +146,7 @@ def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0):
     draw = ImageDraw.Draw(im)
     draw.ellipse([(0,0),(256,256)], fill="white", outline="white")
     img = ImageChops.multiply(img, im)
-    frames = process_depth(img, r, type, jiggle, inverse, blur)
+    frames = process_depth(img, r, type, jiggle, inverse, blur, color)
     buff = BytesIO()
     frames[0].save(
         buff, "gif", save_all=True, append_images=frames[1:], duration=100, loop=0
@@ -237,7 +241,7 @@ class Images(commands.Cog):
         self.bot = bot
         
     @commands.command()
-    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=0.0, inverse:str=False):
+    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0 inverse:str=False):
         '''Make a depth gif of someone's avatar'''
         if user is None:
             user = ctx.author
@@ -245,7 +249,7 @@ class Images(commands.Cog):
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur))
+            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur, color))
                
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
