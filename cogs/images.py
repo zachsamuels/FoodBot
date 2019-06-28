@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageChops
+from PIL import Image, ImageDraw, ImageChops, ImageEnhance
 import math
 import copy
 import random
@@ -89,7 +89,7 @@ def get_template(arr, r, m, inverse):
         i-=1
     return template
     
-def process_depth(img, r, type, jiggle, inverse):
+def process_depth(img, r, type, jiggle, inverse, blur):
     im = Image.new("RGB", (450, 450), "black")
     arr = img.getdata()
     if inverse:
@@ -128,11 +128,13 @@ def process_depth(img, r, type, jiggle, inverse):
                     coords = (c[0]+j, c[1])
                 draw.line(((x,y),coords), fill=color)
             i-=1
+        en = ImageEnhance.Sharpness(im1)
+        im1 = en.enhance(blur)
         frames.append(im1)
     frames += list(reversed(frames))
     return frames
     
-def do_depth(img, r=0, type="line", jiggle=0, inverse=False):
+def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0):
     img = img.resize((256, 256), Image.NEAREST)
     if img.mode != "RGB":
         img = img.convert("RGB")
@@ -140,7 +142,7 @@ def do_depth(img, r=0, type="line", jiggle=0, inverse=False):
     draw = ImageDraw.Draw(im)
     draw.ellipse([(0,0),(256,256)], fill="white", outline="white")
     img = ImageChops.multiply(img, im)
-    frames = process_depth(img, r, type, jiggle, inverse)
+    frames = process_depth(img, r, type, jiggle, inverse, blur)
     buff = BytesIO()
     frames[0].save(
         buff, "gif", save_all=True, append_images=frames[1:], duration=100, loop=0
@@ -235,19 +237,15 @@ class Images(commands.Cog):
         self.bot = bot
         
     @commands.command()
-    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:int=0, inverse:str=False):
+    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=0.0, inverse:str=False):
         '''Make a depth gif of someone's avatar'''
         if user is None:
             user = ctx.author
-        if blur < 240:
-            size = 256-blur
-        else:
-            size = 256
         inverse = inverse == "True"
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=size).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            to_send = pickle.dumps((img, rotate, method, jiggle, inverse))
+            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur))
                
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
