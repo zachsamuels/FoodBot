@@ -241,7 +241,7 @@ class Images(commands.Cog):
         self.bot = bot
         
     @commands.command()
-    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0 inverse:str=False):
+    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0, inverse:str=False):
         '''Make a depth gif of someone's avatar'''
         if user is None:
             user = ctx.author
