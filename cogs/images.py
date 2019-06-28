@@ -89,7 +89,7 @@ def get_template(arr, r, m, inverse):
         i-=1
     return template
     
-def process_depth(img, r, type, jiggle, inverse, blur):
+def process_depth(img, r, type, jiggle, inverse, blur, color):
     im = Image.new("RGB", (450, 450), "black")
     arr = img.getdata()
     if inverse:
