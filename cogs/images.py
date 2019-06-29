@@ -50,9 +50,13 @@ def connecting(point0, point1, m, hyp, itr: int = 0, r=0):
         x = widths[int(progress * xyz[0][1] + .5)]
         y = heights[int(progress * xyz[1][1] + .5)]
         if rotation:
-         x, y = rotate((x,y), c, rot)
-         rot+=rotation
-         c = (c[0]+diff,c[1]+diff)
+            if i != s:
+                ni = sigmoid(p+1)
+                np = ni / literal_steps
+                diff = widths[int(np * xyz[0][1] + .5)] - x
+            x, y = rotate((x,y), c, rot)
+            rot+=rotation
+            c = (c[0]+diff,c[1]+diff)
         link.append((x, y))
     return link
 
@@ -89,7 +93,7 @@ def get_template(arr, r, m, inverse):
         i-=1
     return template
     
-def process_depth(img, r, type, jiggle, inverse, blur, color):
+def process_depth(img, r, type, jiggle, inverse, blur, color, from_start):
     im = Image.new("RGB", (450, 450), "black")
     arr = img.getdata()
     if inverse:
@@ -108,25 +112,26 @@ def process_depth(img, r, type, jiggle, inverse, blur, color):
         im1 = copy.copy(im)
         draw = ImageDraw.Draw(im1)
         i = 65535
-        for rgb in reversed(arr):
-            if rgb == (0,0,0):
+        for color in reversed(arr):
+            if color == (0,0,0):
                 i-=1
                 continue
-            y, x = divmod(i, 256)
-            if point:
-                c = template[(x,y)][step]
-                if step == 0:
-                    coords = c
-                else:
-                    coords = (c[0]+j, c[1])
-                draw.point([coords], fill=rgb)
+            y, x = divmod(i, size[0])
+            c = template[(x,y)][step]
+            if step == 0:
+                coords = c
             else:
-                c = template[(x,y)][step]
-                if step == 0:
-                    coords = c
+                coords = (c[0]+j, c[1])
+            if type == "point":
+                draw.point([coords], fill=color)
+            else:
+                if not from_start and step != 0:
+                    z = template[(x,y)][step-1]
+                    l = (z[0]+last, z[1])
                 else:
-                    coords = (c[0]+j, c[1])
-                draw.line(((x,y),coords), fill=rgb)
+                    l = (x, y)
+                draw.line((l ,coords), fill=color)
+                last = j
             i-=1
         if color != 1.0:
             enhance = ImageEnhance.Color(im1)
@@ -138,7 +143,7 @@ def process_depth(img, r, type, jiggle, inverse, blur, color):
     frames += list(reversed(frames))
     return frames
     
-def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0, color=1.0):
+def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0, color=1.0, from_start=True):
     img = img.resize((256, 256), Image.NEAREST)
     if img.mode != "RGB":
         img = img.convert("RGB")
@@ -146,7 +151,7 @@ def do_depth(img, r=0, type="line", jiggle=0, inverse=False, blur=1.0, color=1.0
     draw = ImageDraw.Draw(im)
     draw.ellipse([(0,0),(256,256)], fill="white", outline="white")
     img = ImageChops.multiply(img, im)
-    frames = process_depth(img, r, type, jiggle, inverse, blur, color)
+    frames = process_depth(img, r, type, jiggle, inverse, blur, color, from_start)
     buff = BytesIO()
     frames[0].save(
         buff, "gif", save_all=True, append_images=frames[1:], duration=100, loop=0
@@ -241,15 +246,16 @@ class Images(commands.Cog):
         self.bot = bot
         
     @commands.command()
-    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0, inverse:str=False):
+    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0, inverse:str=False, from_start:str=True):
         '''Make a depth gif of someone's avatar'''
         if user is None:
             user = ctx.author
         inverse = inverse == "True"
+        from_start = from_start == "True"
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur, color))
+            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur, color, from_start))
                
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
