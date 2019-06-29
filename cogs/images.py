@@ -104,9 +104,7 @@ def process_depth(img, r, type, jiggle, inverse, blur, color, from_start):
     frames = []
     if type != "point":
         im.paste(img, (0,0))
-        point = False
-    else:
-        point = True
+    im1 = copy.copy(im)
     for step in range(10):
         j = random.randint(-jiggle, jiggle)
         im1 = copy.copy(im)
