@@ -107,7 +107,10 @@ def process_depth(img, r, type, jiggle, inverse, blur, color, from_start):
     im1 = copy.copy(im)
     for step in range(10):
         j = random.randint(-jiggle, jiggle)
-        im1 = copy.copy(im)
+        if not from_start and type != "point":
+            im1=copy.copy(im1)
+        else:
+            im1 = copy.copy(im)
         draw = ImageDraw.Draw(im1)
         i = 65535
         for rgb in reversed(arr):
