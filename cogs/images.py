@@ -110,25 +110,25 @@ def process_depth(img, r, type, jiggle, inverse, blur, color, from_start):
         im1 = copy.copy(im)
         draw = ImageDraw.Draw(im1)
         i = 65535
-        for color in reversed(arr):
-            if color == (0,0,0):
+        for rgb in reversed(arr):
+            if rgb == (0,0,0):
                 i-=1
                 continue
-            y, x = divmod(i, size[0])
+            y, x = divmod(i, 256)
             c = template[(x,y)][step]
             if step == 0:
                 coords = c
             else:
                 coords = (c[0]+j, c[1])
             if type == "point":
-                draw.point([coords], fill=color)
+                draw.point([coords], fill=rgb)
             else:
                 if not from_start and step != 0:
                     z = template[(x,y)][step-1]
                     l = (z[0]+last, z[1])
                 else:
                     l = (x, y)
-                draw.line((l ,coords), fill=color)
+                draw.line((l ,coords), fill=rgb)
                 last = j
             i-=1
         if color != 1.0:
