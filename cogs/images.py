@@ -44,8 +44,8 @@ def connecting(point0, point1, m, hyp, itr: int = 0, r=0):
     s = int(steps/2)
     c = (128,128)
     diff = (x1-x0)/steps
-    for i in range(-s,s):
-        i = sigmoid(i)
+    for p in range(-s,s):
+        i = sigmoid(p)
         progress = i / literal_steps
         x = widths[int(progress * xyz[0][1] + .5)]
         y = heights[int(progress * xyz[1][1] + .5)]
