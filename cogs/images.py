@@ -268,6 +268,8 @@ class Images(commands.Cog):
             except:
                 proc.kill()
                 return await ctx.send("Process Errored, try again")
+            if proc.returncode != 0:
+                return await ctx.send(err.decode('utf-8') + f'\nReturn code: {proc.returncode}')
             buff = BytesIO(data)
             t1 = round(time.perf_counter()-t,3)
             await ctx.send(f"Made in {t1}s", file = discord.File(buff,"depth.gif"))
