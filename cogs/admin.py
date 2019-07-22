@@ -58,6 +58,7 @@ class Admin(commands.Cog):
         else:
             await ctx.send("Deleted "+str(len(deleted) - 1)+" messages.")
 
+    '''
     @commands.command()
     async def lunch(self, ctx, *, date=None):
         """
@@ -107,6 +108,7 @@ class Admin(commands.Cog):
         if not em:
             return await ctx.send("There is no lunch scheduled for this day, so it's probably a holiday.")
         await ctx.send(embed=em)
+    '''
 
 def setup(bot):
     bot.add_cog(Admin(bot))
