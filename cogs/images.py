@@ -236,7 +236,11 @@ def process_transform(img1, img2):
 
 def main():
     sent = pickle.loads(sys.stdin.buffer.read())
-    data = do_depth(*sent)
+    x = sent.pop(0)
+    if x:
+        data = do_depth(*sent)
+    else:
+        data = process_transform(*sent)
     stdout_write = sys.stdout.buffer.write
     buff = data.getbuffer()
     stdout_write(buff)
@@ -256,7 +260,7 @@ class Images(commands.Cog):
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            to_send = pickle.dumps((img, rotate, method, jiggle, inverse, blur, color, from_start))
+            to_send = pickle.dumps((1, img, rotate, method, jiggle, inverse, blur, color, from_start))
                
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
@@ -285,9 +289,22 @@ class Images(commands.Cog):
         async with ctx.typing():
             t = time.time()
             if other.id == ctx.author.id:
-                buff = await self.bot.loop.run_in_executor(None, process_transform, im2, im1)
+                to_send = pickle.dumps((0, im2, im1))
             else:
-                buff = await self.bot.loop.run_in_executor(None, process_transform, im1, im2)
+                to_send = pickle.dumps((0, im1, im2))
+            proc = await asyncio.create_subprocess_exec(
+                sys.executable, '-m', __name__,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE)
+            try:
+                data, err = await asyncio.wait_for(proc.communicate(to_send), timeout=30)
+            except:
+                proc.kill()
+                return await ctx.send("Process Errored, try again")
+            if proc.returncode != 0:
+                return await ctx.send(err.decode('utf-8') + f'\nReturn code: {proc.returncode}')
+            buff = BytesIO(data)
             t = round(time.time() - t, 3)
             await ctx.send(f"Made in {t} seconds", file=discord.File(buff, "transform.gif"))
 
