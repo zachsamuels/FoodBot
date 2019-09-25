@@ -6,3 +6,4 @@ psutil
 parsedatetime
 pytz
 Pillow
+numpy
