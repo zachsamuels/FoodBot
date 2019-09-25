@@ -5,3 +5,4 @@ asyncpg
 psutil
 parsedatetime
 pytz
+Pillow
