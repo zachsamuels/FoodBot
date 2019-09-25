@@ -1,4 +1,4 @@
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) ![Discord](https://img.shields.io/discord/451226137620906005.svg?label=discord&colorB=062556) 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg) ![Discord](https://img.shields.io/discord/451226137620906005.svg?label=discord&colorB=062556) 
 
 [![Discord Bots](https://discordbots.org/api/widget/528131615680102410.svg)](https://discordbots.org/bot/528131615680102410)
 
