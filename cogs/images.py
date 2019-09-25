@@ -260,7 +260,7 @@ class Images(commands.Cog):
         img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
-            to_send = pickle.dumps((1, img, rotate, method, jiggle, inverse, blur, color, from_start))
+            to_send = pickle.dumps([1, img, rotate, method, jiggle, inverse, blur, color, from_start])
                
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
@@ -289,9 +289,9 @@ class Images(commands.Cog):
         async with ctx.typing():
             t = time.time()
             if other.id == ctx.author.id:
-                to_send = pickle.dumps((0, im2, im1))
+                to_send = pickle.dumps([0, im2, im1])
             else:
-                to_send = pickle.dumps((0, im1, im2))
+                to_send = pickle.dumps([0, im1, im2])
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
                 stdin=asyncio.subprocess.PIPE,
