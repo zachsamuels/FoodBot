@@ -63,7 +63,7 @@ async def on_message(message):
 @bot.event
 async def on_command(ctx):
     bot.counter+=1
-    w = await bot.get_webhook_info(541858297133924356)
+    w = await bot.fetch_webhook(541858297133924356)
     em = discord.Embed(title = "Command", description = "```"+ctx.message.content+"```")
     if ctx.guild:
         em.add_field(name = "Info", value = "Guild: "+ ctx.guild.name + "(" + str(ctx.guild.id) + ")\nAuthor: "+str(ctx.author) +"("+str(ctx.author.id)+")")
