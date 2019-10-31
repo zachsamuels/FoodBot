@@ -59,7 +59,10 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, commands.NotOwner):
             return await ctx.send("You must be the owner of this bot to use that command.")
-            
+        
+        elif isinstance(error, discord.NotFound):
+            return
+
         await ctx.message.add_reaction("\U0000274c")
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
@@ -67,16 +70,20 @@ class CommandErrorHandler(commands.Cog):
         msg=''
         for x in tb:
             msg= msg + x
-        red = discord.Color.red()
-        em = discord.Embed(title="Error",description=msg, color = red)
-        if ctx.guild:
-            g = str(ctx.guild.id)
-        else:
-            g = "No Guild"
-        em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
         capn = self.bot.get_user(422181415598161921)
-        await capn.send(embed=em)
-        await ctx.send("This command errored, The owner of the bot has been notified.")
+        red = discord.Color.red()
+        times = (len(msg) // 2000) + 1
+        for i in range(times):
+            first = i * 2000
+            second = (i + 1) * 2000
+            em = discord.Embed(title="Error", description=msg[first:second], color=red)
+            if ctx.guild:
+                g = str(ctx.guild.id)
+            else:
+                g = "No Guild"
+            em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
+            await capn.send(embed=em)
+            await ctx.send("This command errored, The owner of the bot has been notified.")
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
