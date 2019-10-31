@@ -76,14 +76,18 @@ class CommandErrorHandler(commands.Cog):
         for i in range(times):
             first = i * 2000
             second = (i + 1) * 2000
-            em = discord.Embed(title="Error", description=msg[first:second], color=red)
+            if not i:
+                em = discord.Embed(title="Error", description=msg[first:second], color=red)
+            else:
+                em = discord.Embed(title=discord.Embed.Empty, description=msg[first:second], color=red)
             if ctx.guild:
                 g = str(ctx.guild.id)
             else:
                 g = "No Guild"
-            em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
+            if i == times - 1:
+                em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
             await capn.send(embed=em)
-            await ctx.send("This command errored, The owner of the bot has been notified.")
+        await ctx.send("This command errored, The owner of the bot has been notified.")
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
