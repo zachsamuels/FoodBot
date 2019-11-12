@@ -310,7 +310,7 @@ class Images(commands.Cog):
             im2 = Image.open(BytesIO(await other.avatar_url_as(format="jpeg", size=256).read()))
         async with ctx.typing():
             t = time.time()
-            if other.id == ctx.author.id:
+            if not isinstance(other, str) and other.id == ctx.author.id:
                 to_send = pickle.dumps([0, im2, im1])
             else:
                 to_send = pickle.dumps([0, im1, im2])
