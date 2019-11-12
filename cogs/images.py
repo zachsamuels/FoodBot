@@ -10,6 +10,7 @@ import numpy as np
 import pickle
 import asyncio
 import sys
+from .converters import MemberURLConverter
 
 def sigmoid(i):
     return 9/(1 + math.exp(-i))
@@ -251,17 +252,24 @@ class Images(commands.Cog):
         self.bot = bot
         
     @commands.command()
-    async def depth(self, ctx, user:discord.Member=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0, inverse:str="False", from_start:str="True"):
+    async def depth(self, ctx, user:MemberURLConverter=None, rotate:int=0, jiggle:int=0, method="line", blur:float=1.0, color:float=1.0, inverse:str="False", from_start:str="True"):
         '''Make a depth gif of someone's avatar'''
         if user is None:
             user = ctx.author
         inverse = inverse == "True"
         from_start = from_start == "True"
-        img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
+        if isinstance(user, str):
+            try:
+                r = await self.bot.session.get(user)
+                data = await r.read()
+                img = Image.open(BytesIO(data))
+            except:
+                return await ctx.send("Invalid user argument passed, the user argument needs to be either a Member or an image URL.")
+        else:
+            img = Image.open(BytesIO(await user.avatar_url_as(format="png",size=256).read()))
         async with ctx.typing():
             t = time.perf_counter()
             to_send = pickle.dumps([1, img, rotate, method, jiggle, inverse, blur, color, from_start])
-               
             proc = await asyncio.create_subprocess_exec(
                 sys.executable, '-m', __name__,
                 stdin=asyncio.subprocess.PIPE,
@@ -279,13 +287,27 @@ class Images(commands.Cog):
             await ctx.send(f"Made in {t1}s", file = discord.File(buff,"depth.gif"))
 
     @commands.command()
-    async def transform(self, ctx, user: discord. Member,
-    other: discord. Member=None):
+    async def transform(self, ctx, user:MemberURLConverter, other:MemberURLConverter=None):
         if other is None:
             other = ctx.author
-        im1 = Image.open(BytesIO (await
-        user.avatar_url_as(format="jpeg", size=256).read()))
-        im2 = Image.open(BytesIO (await other.avatar_url_as(format="jpeg", size=256).read()))
+        if isinstance(user, str):
+            try:
+                r = await self.bot.session.get(user)
+                data = await r.read()
+                im1 = Image.open(BytesIO(data))
+            except:
+                return await ctx.send("Invalid argument passed for user one, the user argument needs to be either a Member or an image URL.")
+        else:
+            im1 = Image.open(BytesIO(await user.avatar_url_as(format="jpeg", size=256).read()))
+        if isinstance(other, str):
+            try:
+                r = await self.bot.session.get(other)
+                data = await r.read()
+                im2 = Image.open(BytesIO(data))
+            except:
+                return await ctx.send("Invalid argument passed for user two, the user argument needs to be either a Member or an image URL.")
+        else:
+            im2 = Image.open(BytesIO(await user.avatar_url_as(format="jpeg", size=256).read()))
         async with ctx.typing():
             t = time.time()
             if other.id == ctx.author.id:
