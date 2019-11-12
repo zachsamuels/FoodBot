@@ -74,7 +74,7 @@ async def on_command(ctx):
 
 @bot.event
 async def on_message_edit(before,after):
-    if not after.author.bot:
+    if not after.author.bot and before.embeds == after.embeds and before.attachments == after.attachments:
         await bot.process_commands(after)
 
 async def update_guild_count():
