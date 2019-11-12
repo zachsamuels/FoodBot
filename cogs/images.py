@@ -307,7 +307,7 @@ class Images(commands.Cog):
             except:
                 return await ctx.send("Invalid argument passed for user two, the user argument needs to be either a Member or an image URL.")
         else:
-            im2 = Image.open(BytesIO(await user.avatar_url_as(format="jpeg", size=256).read()))
+            im2 = Image.open(BytesIO(await other.avatar_url_as(format="jpeg", size=256).read()))
         async with ctx.typing():
             t = time.time()
             if other.id == ctx.author.id:
