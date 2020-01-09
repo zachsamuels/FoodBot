@@ -48,7 +48,7 @@ class Info(commands.Cog):
         em = discord.Embed(title = "Bot Info", description = f"[Bot Invite](https://discordapp.com/oauth2/authorize?&client_id={self.bot.user.id}&scope=bot&permissions=104164673) | [Support Server](https://discord.gg/5ZGbuGq) | [DBL](https://discordbots.org/bot/528131615680102410) | [DBG](https://discordbots.group/bot/528131615680102410) | [Source Code](https://github.com/CapnS/FoodBot) | [Patreon](https://www.patreon.com/capn)")
         em.color = discord.Color.gold()
         em.add_field(name='Guilds', value=str(len(self.bot.guilds)))
-        em.add_field(name = "Users", value = str(len(self.bot.users))
+        em.add_field(name = "Users", value = str(len(self.bot.users)))
         em.add_field(name='Commands Run', value=str(self.bot.counter))
         em.add_field(name='Process Stats', value=f'''{memory_usage:.2f} MiB\n{psutil.cpu_percent()}% CPU''')
         em.add_field(name='Uptime', value=uptime)
