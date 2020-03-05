@@ -5,7 +5,7 @@ import asyncio
 import time
 import aiohttp
 
-bot = commands.Bot(command_prefix="food!")
+bot = commands.Bot(command_prefix=("food!", "Food!"), case_insensitive=True)
 
 async def set_up_token():
     credentials = {"user": "zachary", "password": "capn", "database": "foodbot", "host": "127.0.0.1"}
