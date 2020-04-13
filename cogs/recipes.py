@@ -32,7 +32,7 @@ class Recipe(commands.Cog):
                         c+=1
                     else:
                         f = True
-        if not t['hits']:
+        if not t.get('hits'):
             return await ctx.send("No Recipes Found")
         recipe = t['hits'][0]["recipe"]
         name = recipe['label']
