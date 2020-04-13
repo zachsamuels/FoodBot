@@ -85,7 +85,7 @@ class CommandErrorHandler(commands.Cog):
             else:
                 g = "No Guild"
             if i == times - 1:
-                em.add_field(name="Info", value=str(ctx.author.id) + "\n" + g + "\n" + ctx.command.qualified_name)
+                em.add_field(name="Info", value="Author: "+str(ctx.author.id) + "\nGuild: " + g + "\nChannel:" + str(ctx.channel.id) + "\n`" + ctx.message.content + "`")
             await capn.send(embed=em)
         await ctx.send("This command errored, The owner of the bot has been notified.")
 
