@@ -115,7 +115,10 @@ class Restaurants(commands.Cog):
         async with self.bot.session.get('https://api.yelp.com/v3/businesses/search?term='+term+'&location='+location, headers=authorization) as r:
             try:
                 data = await r.json(loads=ujson.loads)
-                business = data['businesses'][0]
+                try:
+                    business = data['businesses'][0]
+                except:
+                    return await ctx.send("That business was not found on Yelp's API.")
                 business_id = business['id']
                 name = business['name']
                 address = business['location']['address1'] + ' ' + business['location']['zip_code'] + ', ' + business['location']['city']
