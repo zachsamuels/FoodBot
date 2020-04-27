@@ -101,10 +101,24 @@ class Food(commands.Cog):
     async def food(self, ctx, *, search):
         """Gives nutritional value of the food you search foor (Make sure to include amount)"""
         data = await self.bot.db.fetchrow("SELECT * FROM keys")
-        app_id = data['food_id']
-        app_key = data['food_key']
-        async with self.bot.session.get("https://api.edamam.com/api/nutrition-data?ingr="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
-            t = await r.json(loads=ujson.loads)
+        app_ids = data['food_ids']
+        app_keys = data['food_keys']
+        f = False
+        c = 0
+        while not f:
+            try:
+                app_id = app_ids[c]
+                app_key = app_keys[c]
+            except:
+                return await ctx.send("Ratelimited, try again in one minute.")
+            else:
+                async with self.bot.session.get("https://api.edamam.com/api/nutrition-data?ingr="+search+"&app_id="+app_id+"&app_key="+app_key) as r:
+                    try:
+                        t = await r.json(loads=ujson.loads)
+                    except:
+                        c+=1
+                    else:
+                        f = True
         url = t.get("uri")
         diet = t.get("dietLabels")
         health = t.get("healthLabels")
