@@ -42,9 +42,7 @@ class Info(commands.Cog):
             if f.endswith(".py"):
                 with open(dir_path+"/"+f , 'r', encoding="utf8") as b:
                     lines = b.readlines()
-                    length+=len(lines)
-        repo = git.Repo(r"/home/zachary/FoodBot.git")
-        commit = repo.head.commit.message    
+                    length+=len(lines)  
         em = discord.Embed(title = "Bot Info", description = f"[Bot Invite](https://discordapp.com/oauth2/authorize?&client_id={self.bot.user.id}&scope=bot&permissions=104164673) | [Support Server](https://discord.gg/5ZGbuGq) | [DBL](https://discordbots.org/bot/528131615680102410) | [DBG](https://discordbots.group/bot/528131615680102410) | [Source Code](https://github.com/CapnS/FoodBot) | [Patreon](https://www.patreon.com/capn)")
         em.color = discord.Color.gold()
         em.add_field(name='Guilds', value=str(len(self.bot.guilds)))
@@ -52,10 +50,8 @@ class Info(commands.Cog):
         em.add_field(name='Commands Run', value=str(self.bot.counter))
         em.add_field(name='Process Stats', value=f'''{memory_usage:.2f} MiB\n{psutil.cpu_percent()}% CPU''')
         em.add_field(name='Uptime', value=uptime)
-        em.add_field(name = "Prefixes", value = f"``food!``")
-        em.add_field(name="Coded By", value = capn.mention)
+        em.add_field(name="Owner", value = capn.mention, inline=False)
         em.add_field(name="Lines of Code",value = length)
-        em.add_field(name="Latest Commit",value = f"```css\n{commit}\n```")
         em.set_footer(text='Requested by '+ctx.author.name, icon_url=ctx.author.avatar_url)
         em.set_thumbnail(url=self.bot.user.avatar_url)
         em.set_image(url="https://discordbots.org/api/widget/528131615680102410.png")
