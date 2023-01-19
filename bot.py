@@ -20,7 +20,7 @@ async def echo(ctx, *, repeat):
     repeat = repeat.replace("@", "@​")
     await ctx.send(repeat)
     
-@bot.command()
+@bot.hybrid_command()
 async def ping(ctx):
     'Pings Bot'
     channel = ctx.channel
